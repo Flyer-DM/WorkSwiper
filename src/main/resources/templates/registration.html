@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Security Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<style>
+  .gradient-custom-3 {
+    /* fallback for old browsers */
+    background: #FF4E00FF;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(236, 159, 5, 1), rgb(255, 78, 0, 1));
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(236, 159, 5, 1), rgba(255, 78, 0, 1))
+  }
+  .gradient-custom-4 {
+    /* fallback for old browsers */
+    background: #FF4E00FF;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgb(236, 159, 5, 1), rgba(255, 78, 0, 1));
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(236, 159, 5, 1), rgba(255, 78, 0, 1))
+  }
+
+</style>
+<body>
+<section class="vh-100 bg-image">
+  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body p-5">
+              <h2 class="text-uppercase text-center mb-5">Регистрация</h2>
+
+              <div th:if="${param.success}">
+                <div class="alert alert-info">Вы успешно зарегистрировались!</div>
+              </div>
+
+              <div th:if="${param.failed}">
+                <div class="alert alert-info">Вы не выбрали тип аккаунта!</div>
+              </div>
+
+              <form th:action="@{/registration}" method="post" th:object="${user}">
+
+                <div class="form-outline mb-4">
+                  <label class="control-label" for="form-label"> Имя </label>
+                  <input id="form-label" class="form-control form-control-lg" th:field="*{firstName}"
+                         required autofocus="autofocus" />
+                </div>
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="lastName"> Фамилия </label>
+                  <input id="lastName" class="form-control form-control-lg" th:field="*{lastName}"
+                         required autofocus="autofocus" />
+                </div>
+
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="email"> Email </label> <input
+                        id="email" class="form-control form-control-lg" th:field="*{email}" required
+                        autofocus="autofocus" />
+                </div>
+
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="password"> Пароль </label> <input
+                        id="password" class="form-control form-control-lg" type="password"
+                        th:field="*{password}" required autofocus="autofocus" />
+                </div>
+
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="password"> Кто вы? </label>
+                  <select required="required" name="role" class="form-control form-control-lg">
+                    <option selected="selected" disabled="disabled">--Выберите ответ--</option>
+                    <option class="th-shift" value="ROLE_EMPLOYER">Разработчик</option>
+                    <option class="th-shift" value="ROLE_EMPLOYEE">Работодатель</option>
+                </select>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                  <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Зарегистрироваться</button>
+                </div>
+                <p class="text-center text-muted mt-5 mb-0">Уже зарегистрированы? <a href="/index1" th:href="@{/}" class="fw-bold text-body">Авторизоваться
+                </a></p>
+
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
