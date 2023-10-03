@@ -12,11 +12,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-/**
- * Конфигурационный класс доступа для пользователей.
- *
- * @version 1.0
- */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -28,7 +23,6 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
@@ -38,7 +32,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationSuccessHandler myAuthenticationSuccessHandler() {
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
         return new MySimpleUrlAuthenticationSuccessHandler();
     }
 
@@ -47,11 +41,10 @@ public class SecurityConfiguration {
         http.cors().and().csrf().disable();
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/css/**", "/js/**", "/registration**", "/").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/registration**", "/", "/index").permitAll()
                         .requestMatchers("/employer").hasRole("EMPLOYER")
                         .requestMatchers("/employee").hasRole("EMPLOYEE")
-                        .requestMatchers("/user").access(new WebExpressionAuthorizationManager("hasRole('ADMIN') or hasRole('EMPLOYER') or hasRole('EMPLOYEE')"))
+                        .requestMatchers("/user").access(new WebExpressionAuthorizationManager("hasRole('EMPLOYER') or hasRole('EMPLOYEE')"))
                         .anyRequest().authenticated()
 
                 )

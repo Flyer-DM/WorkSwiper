@@ -17,11 +17,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Конфигурационный класс авторизации.
- *
- * @version 1.0
- */
 public class MySimpleUrlAuthenticationSuccessHandler
         implements AuthenticationSuccessHandler {
 
@@ -59,7 +54,6 @@ public class MySimpleUrlAuthenticationSuccessHandler
         Map<String, String> roleTargetUrlMap = new HashMap<>();
         roleTargetUrlMap.put("ROLE_EMPLOYEE", "/employee");
         roleTargetUrlMap.put("ROLE_EMPLOYER", "/employer");
-        roleTargetUrlMap.put("ROLE_ADMIN", "/admin");
 
         final Collection<? extends GrantedAuthority> authorities;
         authorities = authentication.getAuthorities();

@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * Контроллер страницы регистрации.
@@ -52,10 +53,9 @@ public class RegistrationController {
     @PostMapping
     public String registerUserAccount(@ModelAttribute("user") UserRegistrationDto registrationDto,
                                       HttpServletRequest request) {
-
         String role = request.getParameter("role");
         if (role != null) {
-            userService.save(registrationDto, Arrays.asList(new Role(role)));
+            userService.save(registrationDto, List.of(new Role(role)));
             return "redirect:/registration?success";
         } else {
             return "redirect:/registration?failed";

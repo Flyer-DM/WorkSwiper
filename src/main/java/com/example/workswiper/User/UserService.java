@@ -15,8 +15,7 @@ public interface UserService extends UserDetailsService {
      * @param registrationDto - информация, которая сохраняет при регистрации в БД.
      * @return сохранённый объект класса User.
      */
-
-    User save(UserRegistrationDto registrationDto, Collection<Role> role);
+    User save(UserRegistrationDto registrationDto, Collection<Role> roles);
 
     /**
      * Метод получает список всех пользователей из БД.

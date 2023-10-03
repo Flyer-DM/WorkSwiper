@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -22,23 +21,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-
     public UserServiceImpl(UserRepository userRepository) {
         super();
         this.userRepository = userRepository;
     }
 
-
     @Override
-    public User save(UserRegistrationDto registrationDto, Collection<Role> role) {
-        String firstName = registrationDto.getFirstName();
-        String lastName = registrationDto.getLastName();
-        String email = registrationDto.getEmail();
-        String password = passwordEncoder.encode(registrationDto.getPassword());
-        User user = new User(firstName, lastName, email, passwordEncoder.encode(password), role);
+    public User save(UserRegistrationDto registrationDto, Collection<Role> roles) {
+        User user = new User(registrationDto.getFirstName(), registrationDto.getLastName(), registrationDto.getEmail(),
+                passwordEncoder.encode(registrationDto.getPassword()), roles);
         return userRepository.save(user);
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -49,7 +42,6 @@ public class UserServiceImpl implements UserService {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
     }
-
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
