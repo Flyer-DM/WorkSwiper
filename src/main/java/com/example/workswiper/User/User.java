@@ -1,5 +1,6 @@
 package com.example.workswiper.User;
 
+import com.example.workswiper.Domains.Techstack;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -29,8 +30,14 @@ public class User {
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_tech", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tech_id", referencedColumnName = "id"))
+    private Collection<Techstack> techstacks;
 
 
     public User() {
@@ -97,6 +104,14 @@ public class User {
         this.roles = roles;
     }
 
+    public Collection<Techstack> getTechstacks() {
+        return techstacks;
+    }
+
+    public void setTechstacks(Collection<Techstack> techstacks) {
+        this.techstacks = techstacks;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -106,6 +121,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
+                ", techstacks=" + techstacks +
                 '}';
     }
 }

@@ -20,27 +20,34 @@ public class PersonalData {
         return id;
     }
 
-    @Column(name = "patronymic")
+    @Column(name = "patronymic", length = 32)
     private String patronymic;
 
     @Column(name = "age")
     private Long age;
 
-    @Column(name = "country")
+    @Column(name = "country", length = 32)
     private String country;
 
-    @Column(name = "city")
+    @Column(name = "city", length = 32)
     private String city;
 
-    @Column(name = "education")
+    @Column(name = "education", length = 512)
     private String education;
 
-    @Column(name = "aboutme")
+    @Column(name = "aboutme", length = 2048)
     private String aboutme;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user_id;
+
+    public PersonalData() {
+    }
+
+    public PersonalData(User user_id) {
+        this.user_id = user_id;
+    }
 
     public String getPatronymic() {
         return patronymic;
