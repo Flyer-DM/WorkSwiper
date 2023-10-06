@@ -60,11 +60,14 @@ public class EmployeeController {
 
     @RequestMapping("/profile")
     public ModelAndView MyProfile() {
-        ModelAndView mav = new ModelAndView("employee");
+        ModelAndView mav = new ModelAndView("profile");
         User user = getUserByEmail();
         PersonalData personalData = personalDataService.findByUser_Id(user);
         List<Link> linkList = linkService.findByUser_Id(user);
         Collection<Techstack> techstackList = user.getTechstacks();
+        for (Techstack techstack: techstackList) {
+            System.out.println(techstack.getTechnology());
+        }
         mav.addObject("firstName", user.getFirstName());
         mav.addObject("lastName", user.getLastName());
         mav.addObject("email", user.getEmail());
