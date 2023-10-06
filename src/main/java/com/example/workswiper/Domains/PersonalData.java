@@ -20,8 +20,8 @@ public class PersonalData {
         return id;
     }
 
-    @Column(name = "patronymic", length = 32)
-    private String patronymic;
+    @Column(name = "telephone", length = 16)
+    private String telephone;
 
     @Column(name = "age")
     private Long age;
@@ -49,12 +49,12 @@ public class PersonalData {
         this.user_id = user_id;
     }
 
-    public String getPatronymic() {
-        return patronymic;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public Long getAge() {
@@ -109,7 +109,7 @@ public class PersonalData {
     public String toString() {
         return "PersonalData{" +
                 "id=" + id +
-                ", patronymic='" + patronymic + '\'' +
+                ", telephone='" + telephone + '\'' +
                 ", age=" + age +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +

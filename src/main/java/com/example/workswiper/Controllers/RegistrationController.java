@@ -1,8 +1,8 @@
 package com.example.workswiper.Controllers;
 
-import com.example.workswiper.User.Role;
-import com.example.workswiper.User.UserRegistrationDto;
-import com.example.workswiper.User.UserService;
+import com.example.workswiper.Domains.PersonalData;
+import com.example.workswiper.Services.PersonalDataService;
+import com.example.workswiper.User.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +24,16 @@ public class RegistrationController {
 
     private final UserService userService;
 
-    public RegistrationController(UserService userService) {
+    final UserRepository userRepository;
+
+    final PersonalDataService personalDataService;
+
+    public RegistrationController(UserService userService, UserRepository userRepository,
+                                  PersonalDataService personalDataService) {
         super();
         this.userService = userService;
+        this.userRepository = userRepository;
+        this.personalDataService = personalDataService;
     }
 
     @ModelAttribute("user")
@@ -56,6 +63,8 @@ public class RegistrationController {
         String role = request.getParameter("role");
         if (role != null) {
             userService.save(registrationDto, List.of(new Role(role)));
+            User user = userRepository.findByEmail(registrationDto.getEmail());
+            personalDataService.save(new PersonalData(user));
             return "redirect:/registration?success";
         } else {
             return "redirect:/registration?failed";
