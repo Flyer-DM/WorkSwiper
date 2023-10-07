@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Мой профиль</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="../static/css/profile.css" th:href="@{/css/profile.css}">
+</head>
+<body>
+<main class="profile">
+    <form th:action="@{/save_profile}" method="post">
+        <div class="profile-bg"></div>
+        <section class="container">
+            <div class="profile-image">
+            </div>
+            <section class="profile-info">
+                <h1 class="first-name" th:text="${user.firstName}"></h1>
+                <h1 class="second-name" th:text="${user.lastName}"></h1>
+                <h5 class="email" th:text="'Почта: ' + ${user.email}"></h5>
+                <h6 class="age"><label>
+                    <input type="number" class="age" name="age" placeholder="Сколько Вам лет?"
+                           th:if="${personalData != null}" th:value="${personalData.age ?: ''}">
+                </label></h6>
+                <h6 class="country"><label>
+                    <input type="text" class="country" name="country" placeholder="Страна:" maxlength="32"
+                           th:if="${personalData != null}" th:value="${personalData.country ?: ''}">
+                </label></h6>
+                <h6 class="city"><label>
+                    <input type="text" class="city" name="city" placeholder="Город:" maxlength="32"
+                           th:if="${personalData != null}" th:value="${personalData.city ?: ''}">
+                </label></h6>
+                <h6 class="education"><label>
+                    <input type="text" class="education" name="education" placeholder="Образование:" maxlength="512"
+                           th:if="${personalData != null}" th:value="${personalData.education ?: ''}">
+                </label></h6>
+                <div th:if="${not #lists.isEmpty(techstackList)}">
+                    <label>
+                        <select name="techs" class="table-tr" multiple>
+                            <option th:each="tech : ${techstackList}"
+                                    th:value="${tech.technology}" th:text="${tech.technology}">
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <label>
+                    <textarea type="text" class="links" name="links" th:text="${links}"
+                              placeholder="Ссылки на личные профили по паттерну text[url]"></textarea>
+                </label>
+                <h2>Обо мне</h2>
+                <p><label>
+                    <textarea type="text" class="aboutme" name="aboutme"
+                              th:if="${personalData != null}" th:text="${personalData.aboutme ?: ''}">
+                    </textarea>
+                </label></p>
+                <h5 class="telephone" ><label>
+                    <input type="tel" class="telephone" name="telephone" placeholder="+9(999)999-99-99" maxlength="16"
+                           th:if="${personalData != null}" th:value="${personalData.telephone ?: ''}">
+                </label></h5>
+            </section>
+        </section>
+        <button class="icon close"></button>
+        <input type="submit" value="Сохранить">
+    </form>
+</main>
+</body>
+</html>

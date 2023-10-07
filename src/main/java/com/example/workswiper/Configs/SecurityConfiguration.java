@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/registration**", "/", "/index").permitAll()
                         .requestMatchers("/employer").hasRole("EMPLOYER")
-                        .requestMatchers("/employee", "/profile/*").hasRole("EMPLOYEE")
+                        .requestMatchers("/employee", "/profile/*", "edit_profile").hasRole("EMPLOYEE")
                         .requestMatchers("/user").access(new WebExpressionAuthorizationManager("hasRole('EMPLOYER') or hasRole('EMPLOYEE')"))
                         .anyRequest().authenticated()
 

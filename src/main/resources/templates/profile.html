@@ -21,8 +21,8 @@
             <h6 class="country" th:if="${personalData != null}" th:text="${personalData.country ?: ''}"></h6>
             <h6 class="city" th:if="${personalData != null}" th:text="${personalData.city ?: ''}"></h6>
             <h6 class="education" th:if="${personalData != null}" th:text="${personalData.education ?: ''}"></h6>
-            <div th:if="${not #lists.isEmpty(techstackList)}">
-                <ul th:each="tech: ${techstackList}" class="table-tr">
+            <div th:if="${not #lists.isEmpty(techStackList)}">
+                <ul th:each="tech: ${techStackList}" class="table-tr">
                     <li th:text="${tech.technology}"></li>
                 </ul>
             </div>
@@ -44,6 +44,9 @@
 <!--        <p><strong>6</strong> Лайков</p>-->
     </section>
     <button class="icon close"></button>
+    <form th:action="@{/edit_profile}" method="post">
+        <input type="submit" value="Редактировать">
+    </form>
 </main>
 </body>
 </html>

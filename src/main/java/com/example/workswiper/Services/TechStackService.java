@@ -5,6 +5,7 @@ import com.example.workswiper.Repos.TechStackRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -20,6 +21,10 @@ public class TechStackService {
 
     public Optional<Techstack> findByTechnology(String technology) {
         return techStackRepository.findByTechnology(technology);
+    }
+
+    public List<Techstack> findAll() {
+        return techStackRepository.findAll();
     }
 
     public void save(Techstack techstack){

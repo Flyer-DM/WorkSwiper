@@ -1,6 +1,8 @@
 package com.example.workswiper.Controllers;
 
+import com.example.workswiper.Domains.FirstTime;
 import com.example.workswiper.Domains.PersonalData;
+import com.example.workswiper.Services.FirstTimeService;
 import com.example.workswiper.Services.PersonalDataService;
 import com.example.workswiper.User.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,12 +30,15 @@ public class RegistrationController {
 
     final PersonalDataService personalDataService;
 
+    final FirstTimeService firstTimeService;
+
     public RegistrationController(UserService userService, UserRepository userRepository,
-                                  PersonalDataService personalDataService) {
+                                  PersonalDataService personalDataService, FirstTimeService firstTimeService) {
         super();
         this.userService = userService;
         this.userRepository = userRepository;
         this.personalDataService = personalDataService;
+        this.firstTimeService = firstTimeService;
     }
 
     @ModelAttribute("user")
@@ -65,6 +70,7 @@ public class RegistrationController {
             userService.save(registrationDto, List.of(new Role(role)));
             User user = userRepository.findByEmail(registrationDto.getEmail());
             personalDataService.save(new PersonalData(user));
+            if (role.equals("ROLE_EMPLOYEE")) firstTimeService.save(new FirstTime(user));
             return "redirect:/registration?success";
         } else {
             return "redirect:/registration?failed";
