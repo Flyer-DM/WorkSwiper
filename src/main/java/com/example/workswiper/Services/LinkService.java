@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LinkService {
@@ -33,6 +34,10 @@ public class LinkService {
 
     public List<Link> findByUser_Id(User user) {
         return linkRepository.findByUser_Id(user);
+    }
+
+    public Optional<Link> findByLink(String link) {
+        return linkRepository.findByLink(link);
     }
 
 }

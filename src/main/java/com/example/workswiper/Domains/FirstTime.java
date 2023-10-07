@@ -31,6 +31,7 @@ public class FirstTime {
     }
 
     public FirstTime(User user_id) {
+        this.first_time = true;
         this.user_id = user_id;
     }
 

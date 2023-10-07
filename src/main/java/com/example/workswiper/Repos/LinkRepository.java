@@ -7,11 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LinkRepository extends JpaRepository<Link, Long> {
 
-    @Query("SELECT p FROM Link p WHERE p.user_id = ?1")
+    @Query("SELECT l FROM Link l WHERE l.user_id = ?1")
     List<Link> findByUser_Id(User user);
 
+    @Query("SELECT l FROM Link l WHERE l.link = ?1")
+    Optional<Link> findByLink(String link);
 }

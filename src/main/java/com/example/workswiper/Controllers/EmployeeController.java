@@ -86,7 +86,7 @@ public class EmployeeController {
 
     @RequestMapping("/employee")
     public ModelAndView Index() {
-        ModelAndView mav = new ModelAndView("edit_profile");
+        ModelAndView mav = new ModelAndView("employee");
         User user = getUserByEmail();
         FirstTime firstTime = firstTimeService.findByUser_Id(user);
         if (firstTime.isFirst_time()) {
@@ -132,13 +132,22 @@ public class EmployeeController {
         personalDataService.save(personalData);
         String[] techs = request.getParameterValues("techs");
         List<Techstack> techstacks = new ArrayList<>();
-        if (techs != null && techs.length != 0) {
+        if (techs != null) {
             for (String tech : techs) {
                 techstacks.add(techStackService.findByTechnology(tech).get());
             }
-            user.setTechstacks(techstacks);
-            userService.save(user);
         }
+        user.setTechstacks(techstacks);
+        userService.save(user);
+//        String links = request.getParameter("links");
+//        if (links != null) {
+//            List<Link> AllUserLinks = linkService.findByUser_Id(user);
+//            for (String link : links.split("\n")) {
+//                String linkText = link.substring(0, link.indexOf("["));
+//                String linkLink = link.substring(link.indexOf("[") + 1, link.indexOf("]"));
+//
+//                }
+//            }
         return MyProfile();
     }
 }

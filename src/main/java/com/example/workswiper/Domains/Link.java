@@ -55,4 +55,11 @@ public class Link {
         this.link = link;
     }
 
+    public User getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
+    }
 }
