@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import com.example.workswiper.User.UserServiceImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -135,13 +133,17 @@ public class EmployeeController {
         user.setTechstacks(techstacks);
         userService.save(user);
         String linksTextArea = request.getParameter("links");
+        List<Link> linkFromDB = linkService.findByUser_Id(user);
+        for (Link linkDB: linkFromDB) {
+            linkService.delete(linkDB.getId());
+        }
         if (linksTextArea != null) {
             linksTextArea = linksTextArea.replace(" ", "\n");
             for (String link : linksTextArea.split("\n")) {
                 String linkText = link.substring(link.indexOf("//") + 2, link.indexOf("/", 8));
                 linkService.save(new Link(linkText, link, user));
-                }
             }
+        }
         return MyProfile();
     }
 }
