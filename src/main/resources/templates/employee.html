@@ -1,13 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee</title>
+    <link type="text/css" rel="stylesheet" href="../static/css/card.css" th:href="@{/css/card.css}">
 </head>
+
 <body>
-Мой профиль (разработчик)
-<form th:action="@{/profile}" method="post">
-    <input type="submit" value="Профиль">
-</form>
+<ion-icon id="dislike" name="heart-dislike"></ion-icon>
+<div id="swiper">
+    <p class="card-name"></p>
+    <p class="card-description"></p>
+    <p class="card-stack"></p>
+    <p class="card-datestart"></p>
+    <p class="card-dateend"></p>
+    <p class="card-result"></p>
+    <p class="card-price"></p>
+</div>
+<ion-icon id="like" name="heart"></ion-icon>
+
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
+
+<script lang="JavaScript">
+    class Card {
+        constructor({
+                        imageUrl,
+                        onDismiss,
+                        onLike,
+                        onDislike,
+                        Name,
+                        Description,
+                        Stack,
+                        DateStart,
+                        DateEnd,
+                        Result,
+                        Price
+                    }) {
+            this.imageUrl = imageUrl;
+            this.onDismiss = onDismiss;
+            this.onLike = onLike;
+            this.onDislike = onDislike;
+            this.Name = Name;
+            this.Description = Description;
+            this.Stack = Stack;
+            this.DateStart = DateStart;
+            this.DateEnd = DateEnd;
+            this.Result = Result;
+            this.Price = Price;
+
+            this.#init();
+        }
+
+        // private properties
+        #startPoint;
+        #offsetX;
+        #offsetY;
+
+        #isTouchDevice = () => {
+            return (('ontouchstart' in window) ||
+                (navigator.maxTouchPoints > 0) ||
+                (navigator.msMaxTouchPoints > 0));
+        }
+
+        #init = () => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            const img = document.createElement('img');
+            img.src = this.imageUrl;
+
+
+            const textElement = document.createElement('p');
+            textElement.textContent = this.Name;
+            textElement.classList.add('card-name');
+            card.append(textElement);
+
+            const textElement2 = document.createElement('p');
+            textElement2.textContent = this.Description;
+            textElement2.classList.add('card-description');
+            card.append(textElement2);
+
+            const textElement3 = document.createElement('p');
+            textElement3.textContent = this.Stack;
+            textElement3.classList.add('card-stack');
+            card.append(textElement3);
+
+            const textElement4 = document.createElement('p');
+            textElement4.textContent = this.DateStart;
+            textElement4.classList.add('card-datestart');
+            card.append(textElement4);
+
+            const textElement5 = document.createElement('p');
+            textElement5.textContent = this.DateEnd;
+            textElement5.classList.add('card-dateend');
+            card.append(textElement5);
+
+            const textElement6 = document.createElement('p');
+            textElement6.textContent = this.Result;
+            textElement6.classList.add('card-result');
+            card.append(textElement6);
+
+            const textElement7 = document.createElement('p');
+            textElement7.textContent = this.Price;
+            textElement7.classList.add('card-price');
+            card.append(textElement7);
+
+            this.element = card;
+            if (this.#isTouchDevice()) {
+                this.#listenToTouchEvents();
+            } else {
+                this.#listenToMouseEvents();
+            }
+        }
+
+        #listenToTouchEvents = () => {
+            this.element.addEventListener('touchstart', (e) => {
+                const touch = e.changedTouches[0];
+                if (!touch) return;
+                const { clientX, clientY } = touch;
+                this.#startPoint = { x: clientX, y: clientY }
+                document.addEventListener('touchmove', this.#handleTouchMove);
+                this.element.style.transition = 'transform 0s';
+            });
+
+            document.addEventListener('touchend', this.#handleTouchEnd);
+            document.addEventListener('cancel', this.#handleTouchEnd);
+        }
+
+        #listenToMouseEvents = () => {
+            this.element.addEventListener('mousedown', (e) => {
+                const { clientX, clientY } = e;
+                this.#startPoint = { x: clientX, y: clientY }
+                document.addEventListener('mousemove', this.#handleMouseMove);
+                this.element.style.transition = 'transform 0s';
+            });
+
+            document.addEventListener('mouseup', this.#handleMoveUp);
+
+            // prevent card from being dragged
+            this.element.addEventListener('dragstart', (e) => {
+                e.preventDefault();
+            });
+        }
+
+        #handleMove = (x, y) => {
+            this.#offsetX = x - this.#startPoint.x;
+            this.#offsetY = y - this.#startPoint.y;
+            const rotate = this.#offsetX * 0.1;
+            this.element.style.transform = `translate(${this.#offsetX}px, ${this.#offsetY}px) rotate(${rotate}deg)`;
+            // dismiss card
+            if (Math.abs(this.#offsetX) > this.element.clientWidth * 0.7) {
+                this.#dismiss(this.#offsetX > 0 ? 1 : -1);
+            }
+        }
+
+        // mouse event handlers
+        #handleMouseMove = (e) => {
+            e.preventDefault();
+            if (!this.#startPoint) return;
+            const { clientX, clientY } = e;
+            this.#handleMove(clientX, clientY);
+        }
+
+        #handleMoveUp = () => {
+            this.#startPoint = null;
+            document.removeEventListener('mousemove', this.#handleMouseMove);
+            this.element.style.transform = '';
+        }
+
+        // touch event handlers
+        #handleTouchMove = (e) => {
+            if (!this.#startPoint) return;
+            const touch = e.changedTouches[0];
+            if (!touch) return;
+            const { clientX, clientY } = touch;
+            this.#handleMove(clientX, clientY);
+        }
+
+        #handleTouchEnd = () => {
+            this.#startPoint = null;
+            document.removeEventListener('touchmove', this.#handleTouchMove);
+            this.element.style.transform = '';
+        }
+
+        #dismiss = (direction) => {
+            this.#startPoint = null;
+            document.removeEventListener('mouseup', this.#handleMoveUp);
+            document.removeEventListener('mousemove', this.#handleMouseMove);
+            document.removeEventListener('touchend', this.#handleTouchEnd);
+            document.removeEventListener('touchmove', this.#handleTouchMove);
+            this.element.style.transition = 'transform 1s';
+            this.element.style.transform = `translate(${direction * window.innerWidth}px, ${this.#offsetY}px) rotate(${90 * direction}deg)`;
+            this.element.classList.add('dismissing');
+            setTimeout(() => {
+                this.element.remove();
+            }, 1000);
+            if (typeof this.onDismiss === 'function') {
+                this.onDismiss();
+            }
+            if (typeof this.onLike === 'function' && direction === 1) {
+                this.onLike();
+            }
+            if (typeof this.onDislike === 'function' && direction === -1) {
+                this.onDislike();
+            }
+        }
+    }
+    // DOM
+    const swiper = document.querySelector('#swiper');
+    const like = document.querySelector('#like');
+    const dislike = document.querySelector('#dislike');
+
+    // constants
+    const urls = [
+        'https://source.unsplash.com/random/1000x1000/?sky',
+        'https://source.unsplash.com/random/1000x1000/?landscape',
+        'https://source.unsplash.com/random/1000x1000/?ocean',
+        'https://source.unsplash.com/random/1000x1000/?moutain',
+        'https://source.unsplash.com/random/1000x1000/?forest'
+    ];
+
+    // variables
+    let cardCount = 0;
+
+    // functions
+    function appendNewCard() {
+        const card = new Card({
+            imageUrl: urls[cardCount % 5],
+            Name: "Создание веб приложения",
+            Description: "Очень хорошего приложения!",
+            Stack: "Стек технологий",
+            DateStart: "20 июня",
+            DateEnd: "31 июня",
+            Result: "Нужно чтобы было реально круто и удобно!",
+            Price: "100 Евро",
+
+
+            onDismiss: appendNewCard,
+            onLike: () => {
+                like.style.animationPlayState = 'running';
+                like.classList.toggle('trigger');
+            },
+            onDislike: () => {
+                dislike.style.animationPlayState = 'running';
+                dislike.classList.toggle('trigger');
+            }
+        });
+
+        const swiper = document.querySelector('#swiper');
+        swiper.append(card.element);
+        cardCount++;
+
+        const cards = swiper.querySelectorAll('.card:not(.dismissing)');
+        cards.forEach((card, index) => {
+            card.style.setProperty('--i', index);
+        });
+    }
+
+
+    // first 5 cards
+    for (let i = 0; i < 5; i++) {
+        appendNewCard();
+    }
+
+
+</script>
+
 </html>

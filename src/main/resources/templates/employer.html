@@ -1,10 +1,317 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer</title>
+    <link type="text/css" rel="stylesheet" href="../static/css/card.css" th:href="@{/css/card.css}">
 </head>
+
 <body>
-Мой профиль (работодатель)
+<table id="1" class="table table-striped table-hover" style="display:none;">
+    <thead>
+    <tr>
+        <th scope="col">Имя</th>
+        <th scope="col">Фамилия</th>
+        <th scope="col">Почта</th>
+        <th scope="col">Телефон</th>
+        <th scope="col">Возраст</th>
+        <th scope="col">Страна</th>
+        <th scope="col">Город</th>
+        <th scope="col">Образование</th>
+        <th scope="col">Обо мне</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user: ${listUsers}" class="table-tr">
+        <th scope="row" class="table-th" th:text="${user.getFirstName()()}"></th>
+        <th scope="row" class="table-th" th:text="${user.getLastName()}"></th>
+        <th scope="row" class="table-th" th:text="${user.getEmail()}"></th>
+    </tr>
+    </tbody>
+</table>
+
+
+
+<ion-icon id="dislike" name="heart-dislike"></ion-icon>
+<div id="swiper">
+    <p class="card-firstname"></p>
+    <p class="card-lastname"></p>
+    <p class="card-email"></p>
+    <p class="card-telephone"></p>
+    <p class="card-age"></p>
+    <p class="card-country"></p>
+    <p class="card-city"></p>
+    <p class="card-education"></p>
+    <p class="card-aboutme"></p>
+</div>
+<ion-icon id="like" name="heart"></ion-icon>
+
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
+
+<script lang="JavaScript">
+    class Card {
+        constructor({
+                        imageUrl,
+                        onDismiss,
+                        onLike,
+                        onDislike,
+                        FirstName,
+                        LastName,
+                        Email,
+                        Telephone,
+                        Age,
+                        Country,
+                        City,
+                        Education,
+                        AboutMe
+                    }) {
+            this.imageUrl = imageUrl;
+            this.onDismiss = onDismiss;
+            this.onLike = onLike;
+            this.onDislike = onDislike;
+            this.FirstName = FirstName;
+            this.LastName = LastName;
+            this.Email = Email;
+            this.Telephone = Telephone;
+            this.Age = Age;
+            this.Country = Country;
+            this.City = City;
+            this.Education = Education;
+            this.AboutMe = AboutMe;
+
+            this.#init();
+        }
+
+        // private properties
+        #startPoint;
+        #offsetX;
+        #offsetY;
+
+        #isTouchDevice = () => {
+            return (('ontouchstart' in window) ||
+                (navigator.maxTouchPoints > 0) ||
+                (navigator.msMaxTouchPoints > 0));
+        }
+
+        #init = () => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            const img = document.createElement('img');
+            img.src = this.imageUrl;
+
+
+            const textElement = document.createElement('p');
+            textElement.textContent = this.FirstName;
+            textElement.classList.add('card-firstname');
+            card.append(textElement);
+
+            const textElement2 = document.createElement('p');
+            textElement2.textContent = this.LastName;
+            textElement2.classList.add('card-lastname');
+            card.append(textElement2);
+
+            const textElement3 = document.createElement('p');
+            textElement3.textContent = this.Email;
+            textElement3.classList.add('card-email');
+            card.append(textElement3);
+
+            const textElement4 = document.createElement('p');
+            textElement4.textContent = this.Telephone;
+            textElement4.classList.add('card-telephone');
+            card.append(textElement4);
+
+            const textElement5 = document.createElement('p');
+            textElement5.textContent = this.Age;
+            textElement5.classList.add('card-age');
+            card.append(textElement5);
+
+            const textElement6 = document.createElement('p');
+            textElement6.textContent = this.Country;
+            textElement6.classList.add('card-country');
+            card.append(textElement6);
+
+            const textElement7 = document.createElement('p');
+            textElement7.textContent = this.City;
+            textElement7.classList.add('card-city');
+            card.append(textElement7);
+
+            const textElement8 = document.createElement('p');
+            textElement8.textContent = this.Education;
+            textElement8.classList.add('card-education');
+            card.append(textElement8);
+
+            const textElement9 = document.createElement('p');
+            textElement9.textContent = this.AboutMe;
+            textElement9.classList.add('card-aboutme');
+            card.append(textElement9);
+
+
+            this.element = card;
+            if (this.#isTouchDevice()) {
+                this.#listenToTouchEvents();
+            } else {
+                this.#listenToMouseEvents();
+            }
+        }
+
+        #listenToTouchEvents = () => {
+            this.element.addEventListener('touchstart', (e) => {
+                const touch = e.changedTouches[0];
+                if (!touch) return;
+                const { clientX, clientY } = touch;
+                this.#startPoint = { x: clientX, y: clientY }
+                document.addEventListener('touchmove', this.#handleTouchMove);
+                this.element.style.transition = 'transform 0s';
+            });
+
+            document.addEventListener('touchend', this.#handleTouchEnd);
+            document.addEventListener('cancel', this.#handleTouchEnd);
+        }
+
+        #listenToMouseEvents = () => {
+            this.element.addEventListener('mousedown', (e) => {
+                const { clientX, clientY } = e;
+                this.#startPoint = { x: clientX, y: clientY }
+                document.addEventListener('mousemove', this.#handleMouseMove);
+                this.element.style.transition = 'transform 0s';
+            });
+
+            document.addEventListener('mouseup', this.#handleMoveUp);
+
+            // prevent card from being dragged
+            this.element.addEventListener('dragstart', (e) => {
+                e.preventDefault();
+            });
+        }
+
+        #handleMove = (x, y) => {
+            this.#offsetX = x - this.#startPoint.x;
+            this.#offsetY = y - this.#startPoint.y;
+            const rotate = this.#offsetX * 0.1;
+            this.element.style.transform = `translate(${this.#offsetX}px, ${this.#offsetY}px) rotate(${rotate}deg)`;
+            // dismiss card
+            if (Math.abs(this.#offsetX) > this.element.clientWidth * 0.7) {
+                this.#dismiss(this.#offsetX > 0 ? 1 : -1);
+            }
+        }
+
+        // mouse event handlers
+        #handleMouseMove = (e) => {
+            e.preventDefault();
+            if (!this.#startPoint) return;
+            const { clientX, clientY } = e;
+            this.#handleMove(clientX, clientY);
+        }
+
+        #handleMoveUp = () => {
+            this.#startPoint = null;
+            document.removeEventListener('mousemove', this.#handleMouseMove);
+            this.element.style.transform = '';
+        }
+
+        // touch event handlers
+        #handleTouchMove = (e) => {
+            if (!this.#startPoint) return;
+            const touch = e.changedTouches[0];
+            if (!touch) return;
+            const { clientX, clientY } = touch;
+            this.#handleMove(clientX, clientY);
+        }
+
+        #handleTouchEnd = () => {
+            this.#startPoint = null;
+            document.removeEventListener('touchmove', this.#handleTouchMove);
+            this.element.style.transform = '';
+        }
+
+        #dismiss = (direction) => {
+            this.#startPoint = null;
+            document.removeEventListener('mouseup', this.#handleMoveUp);
+            document.removeEventListener('mousemove', this.#handleMouseMove);
+            document.removeEventListener('touchend', this.#handleTouchEnd);
+            document.removeEventListener('touchmove', this.#handleTouchMove);
+            this.element.style.transition = 'transform 1s';
+            this.element.style.transform = `translate(${direction * window.innerWidth}px, ${this.#offsetY}px) rotate(${90 * direction}deg)`;
+            this.element.classList.add('dismissing');
+            setTimeout(() => {
+                this.element.remove();
+            }, 1000);
+            if (typeof this.onDismiss === 'function') {
+                this.onDismiss();
+            }
+            if (typeof this.onLike === 'function' && direction === 1) {
+                this.onLike();
+            }
+            if (typeof this.onDislike === 'function' && direction === -1) {
+                this.onDislike();
+            }
+        }
+    }
+    // DOM
+    const swiper = document.querySelector('#swiper');
+    const like = document.querySelector('#like');
+    const dislike = document.querySelector('#dislike');
+
+    // constants
+    const urls = [
+        'https://source.unsplash.com/random/1000x1000/?sky',
+        'https://source.unsplash.com/random/1000x1000/?landscape',
+        'https://source.unsplash.com/random/1000x1000/?ocean',
+        'https://source.unsplash.com/random/1000x1000/?moutain',
+        'https://source.unsplash.com/random/1000x1000/?forest'
+    ];
+
+    // variables
+    let cardCount = 0;
+
+    // functions
+    function appendNewCard() {
+        const card = new Card({
+            imageUrl: urls[cardCount % 5],
+            FirstName: "Имя",
+            LastName: "Фамилия",
+            Email: "mail.ru",
+            Telephone: "+8(800)535-35-35",
+            Age: "20",
+            Country: "Россия",
+            City: "Москва",
+            Education: "Образование топ",
+            AboutMe: "Я не хороший, не плохой",
+
+            onDismiss: appendNewCard,
+            onLike: () => {
+                like.style.animationPlayState = 'running';
+                like.classList.toggle('trigger');
+            },
+            onDislike: () => {
+                dislike.style.animationPlayState = 'running';
+                dislike.classList.toggle('trigger');
+            }
+        });
+
+        const swiper = document.querySelector('#swiper');
+        swiper.append(card.element);
+        cardCount++;
+
+        const cards = swiper.querySelectorAll('.card:not(.dismissing)');
+        cards.forEach((card, index) => {
+            card.style.setProperty('--i', index);
+        });
+    }
+
+
+    // first 5 cards
+    for (let i = 0; i < 5; i++) {
+        appendNewCard();
+    }
+
+
+</script>
+
 </html>
