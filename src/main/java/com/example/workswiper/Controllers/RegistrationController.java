@@ -69,8 +69,10 @@ public class RegistrationController {
         if (role != null) {
             userService.save(registrationDto, List.of(new Role(role)));
             User user = userRepository.findByEmail(registrationDto.getEmail());
-            personalDataService.save(new PersonalData(user));
-            if (role.equals("ROLE_EMPLOYEE")) firstTimeService.save(new FirstTime(user));
+            if (role.equals("ROLE_EMPLOYEE")) {
+                firstTimeService.save(new FirstTime(user));
+                personalDataService.save(new PersonalData(user));
+            }
             return "redirect:/registration?success";
         } else {
             return "redirect:/registration?failed";

@@ -71,12 +71,7 @@ public class EmployeeController {
         PersonalData personalData = personalDataService.findByUser_Id(user);
         List<Link> linkList = linkService.findByUser_Id(user);
         List<String> strLinks = linkList.stream().map(Link::getLink).toList();
-        List<String> strLinksTexts = linkList.stream().map(Link::getText).toList();
-        List<String> template = new ArrayList<>();
-        for(int i = 0; i < strLinks.size(); i++) {
-            template.add(strLinksTexts.get(i) + "[" + strLinks.get(i) + "]");
-        }
-        String links = String.join("\n", template);
+        String links = String.join("\n", strLinks);
         mav.addObject(user);
         mav.addObject(techstackList);
         mav.addObject(personalData);
@@ -139,15 +134,14 @@ public class EmployeeController {
         }
         user.setTechstacks(techstacks);
         userService.save(user);
-//        String links = request.getParameter("links");
-//        if (links != null) {
-//            List<Link> AllUserLinks = linkService.findByUser_Id(user);
-//            for (String link : links.split("\n")) {
-//                String linkText = link.substring(0, link.indexOf("["));
-//                String linkLink = link.substring(link.indexOf("[") + 1, link.indexOf("]"));
-//
-//                }
-//            }
+        String linksTextArea = request.getParameter("links");
+        if (linksTextArea != null) {
+            linksTextArea = linksTextArea.replace(" ", "\n");
+            for (String link : linksTextArea.split("\n")) {
+                String linkText = link.substring(link.indexOf("//") + 2, link.indexOf("/", 8));
+                linkService.save(new Link(linkText, link, user));
+                }
+            }
         return MyProfile();
     }
 }

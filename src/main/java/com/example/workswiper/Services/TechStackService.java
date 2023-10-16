@@ -2,6 +2,7 @@ package com.example.workswiper.Services;
 
 import com.example.workswiper.Domains.Techstack;
 import com.example.workswiper.Repos.TechStackRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +25,7 @@ public class TechStackService {
     }
 
     public List<Techstack> findAll() {
-        return techStackRepository.findAll();
+        return techStackRepository.findAll(Sort.by(Sort.Direction.ASC, "technology"));
     }
 
     public void save(Techstack techstack){
