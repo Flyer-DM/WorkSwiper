@@ -287,6 +287,18 @@
         'https://source.unsplash.com/random/1000x1000/?forest'
     ];
 
+    const names = [
+        'hi',
+        'bye',
+        'james'
+    ]
+
+    const lastname = [
+        'ttt',
+        'fff',
+        'rrr'
+    ]
+
     // variables
     let cardCount = 0;
 
@@ -294,15 +306,15 @@
     function appendNewCard() {
         const card = new Card({
             imageUrl: urls[cardCount % 5],
-            FirstName: "Имя",
-            LastName: "Фамилия",
+            FirstName: names[cardCount],
+            LastName: lastname[cardCount],
             Email: "mail.ru",
             Telephone: "+8(800)535-35-35",
-            Age: "20",
-            Country: "Россия",
-            City: "Москва",
-            Education: "Образование топ",
-            AboutMe: "Я не хороший, не плохой",
+            Age: "Возраст: " + "20",
+            Country: "Cтрана: " + "Россия",
+            City: "Город: " + "Москва",
+            Education: "Образование: " + "Образование топ",
+            AboutMe: "Описание: " + "Я не хороший, не плохой",
 
             onDismiss: appendNewCard,
             onLike: () => {

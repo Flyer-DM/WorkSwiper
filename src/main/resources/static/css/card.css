@@ -66,6 +66,25 @@ body {
     text-shadow: 4px 4px 4px #000;
 }
 
+.card-telephone{
+    color: white;
+    font-size: 35px;
+    text-shadow:  4px 4px 4px #000;
+}
+
+.card-age, .card-country, .card-city, .card-aboutme{
+    color: white;
+    font-size: 40px;
+    text-shadow: 4px 4px 4px #000;
+}
+
+.card-education{
+    color: white;
+    font-size: 35px;
+    text-shadow: 4px 4px 4px #000;
+}
+
+
 #like,
 #dislike {
     font-size: 16vh;

@@ -119,42 +119,30 @@ path {
 }
 
 input {
-    all: unset;
+    background: none;
 }
 
-.button {
-    color: #1b3fcc;
-    transition: all 0.5s;
-    position: relative;
-    font-size: 35px;
+.my-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 5px #2980b9;
 }
-.button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    background-color: rgba(1, 61, 192, 0.1);
-    transition: all 0.3s;
+
+.my-button:hover {
+    background-color: #2980b9;
 }
-.button:hover::before {
-    opacity: 0 ;
-    transform: scale(0.5,0.5);
-}
-.button::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 248px;
-    height: 40px;
-    z-index: 1;
-    opacity: 0;
-    transition: all 0.3s;
-    border: 1px solid rgba(9, 3, 176, 0.5);
-    transform: scale(1.2,1.2);
-}
-.button:hover::after {
-    opacity: 1;
-    transform: scale(1,1);
+
+.my-button:active {
+    background-color: #2471a3;
+    box-shadow: 0 2px #2980b9;
+    transform: translateY(4px);
 }

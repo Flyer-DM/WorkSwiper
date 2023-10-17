@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <link type="text/css" rel="stylesheet" href="../static/css/profile2.css" th:href="@{/css/profile.css}">
+    <link type="text/css" rel="stylesheet" href="../static/css/profile.css" th:href="@{/css/profile.css}">
 </head>
 <body>
 <div class="card">
@@ -45,8 +45,8 @@
             <h4 class="telephone" th:if="${personalData != null}" th:text="${personalData.telephone ?: ''}">+7(800)535-35-35</h4>
             <br>
             <div class="box-3">
-                <form class="button" th:action="@{/edit_profile}" method="post">
-                    <input type="submit" value="Редактировать">
+                <form th:action="@{/edit_profile}" method="post">
+                    <input class="my-button" type="submit" value="Редактировать">
                 </form>
             </div>
 
