@@ -25,31 +25,41 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="user : ${listUsers}" class="table-tr">
-        <th scope="row" class="table-th" th:text="${user.firstName}"></th>
-        <th scope="row" class="table-th" th:text="${user.lastName}"></th>
-        <th scope="row" class="table-th" th:text="${user.email}"></th>
-    </tr>
-    <tr th:each="personalData : ${personalDataList}" class="table-tr">
-        <th scope="row" class="table-th" th:text="${personalData.telephone}"></th>
-        <th scope="row" class="table-th" th:text="${personalData.age}"></th>
-        <th scope="row" class="table-th" th:text="${personalData.country}"></th>
-        <th scope="row" class="table-th" th:text="${personalData.city}"></th>
-        <th scope="row" class="table-th" th:text="${personalData.education}"></th>
-        <th scope="row" class="table-th" th:text="${personalData.aboutme}"></th>
-    </tr>
-    <tr th:each="techs : ${TechStacks}" class="table-tr">
-        <th scope="row" class="table-th" th:text="${techs}"></th>
-    </tr>
-    <tr th:each="links : ${linksList}" class="table-tr">
-        <th scope="row" class="table-th">
-            <ul>
-                <li th:each="link : ${links}">
-                    <a class="text-black" th:text="${link.text}" th:href="${link.link}"></a>
-                </li>
-            </ul>
-        </th>
-    </tr>
+    <div th:if="${not #lists.isEmpty(listUsers)}">
+        <tr th:each="user : ${listUsers}" class="table-tr">
+            <th scope="row" class="table-th" th:text="${user.firstName}"></th>
+            <th scope="row" class="table-th" th:text="${user.lastName}"></th>
+            <th scope="row" class="table-th" th:text="${user.email}"></th>
+        </tr>
+    </div>
+    <div th:if="${not #lists.isEmpty(personalDataList)}">
+        <tr th:each="personalData : ${personalDataList}" class="table-tr">
+            <th scope="row" class="table-th" th:if="${personalData != null}" th:text="${personalData.telephone ?: ''}"></th>
+            <th scope="row" class="table-th" th:if="${personalData != null}" th:text="${personalData.age ?: ''}"></th>
+            <th scope="row" class="table-th" th:if="${personalData != null}" th:text="${personalData.country ?: ''}"></th>
+            <th scope="row" class="table-th" th:if="${personalData != null}" th:text="${personalData.city ?: ''}"></th>
+            <th scope="row" class="table-th" th:if="${personalData != null}" th:text="${personalData.education ?: ''}"></th>
+            <th scope="row" class="table-th" th:if="${personalData != null}" th:text="${personalData.aboutme ?: ''}"></th>
+        </tr>
+    </div>
+    <div th:if="${not #lists.isEmpty(TechStacks)}">
+        <tr th:each="techs : ${TechStacks}" class="table-tr">
+            <th scope="row" class="table-th" th:text="${techs}"></th>
+        </tr>
+    </div>
+    <div th:if="${not #lists.isEmpty(linksList)}">
+        <tr th:each="links : ${linksList}" class="table-tr">
+            <th scope="row" class="table-th">
+                <div th:if="${not #lists.isEmpty(links)}">
+                    <ul>
+                        <li th:each="link : ${links}">
+                            <a class="text-black" th:text="${link.text}" th:href="${link.link}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+    </div>
     </tbody>
 </table>
 
