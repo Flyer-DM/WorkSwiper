@@ -25,14 +25,14 @@
     </tr>
     </thead>
     <tbody>
-    <div th:if="${not #lists.isEmpty(listUsers)}">
+    <div th:if="${not #lists.isEmpty(listUsers)}" style="display:none;">
         <tr th:each="user : ${listUsers}" class="table-tr">
             <th scope="row" class="table-th" th:text="${user.firstName}"></th>
             <th scope="row" class="table-th" th:text="${user.lastName}"></th>
             <th scope="row" class="table-th" th:text="${user.email}"></th>
         </tr>
     </div>
-    <div th:if="${not #lists.isEmpty(personalDataList)}">
+    <div th:if="${not #lists.isEmpty(personalDataList)}" style="display:none;">
         <tr th:each="personalData : ${personalDataList}" class="table-tr">
             <th scope="row" class="table-th" th:if="${personalData != null}" th:text="${personalData.telephone ?: ''}"></th>
             <th scope="row" class="table-th" th:if="${personalData != null}" th:text="${personalData.age ?: ''}"></th>
@@ -42,12 +42,12 @@
             <th scope="row" class="table-th" th:if="${personalData != null}" th:text="${personalData.aboutme ?: ''}"></th>
         </tr>
     </div>
-    <div th:if="${not #lists.isEmpty(TechStacks)}">
+    <div th:if="${not #lists.isEmpty(TechStacks)}" style="display:none;">
         <tr th:each="techs : ${TechStacks}" class="table-tr">
             <th scope="row" class="table-th" th:text="${techs}"></th>
         </tr>
     </div>
-    <div th:if="${not #lists.isEmpty(linksList)}">
+    <div th:if="${not #lists.isEmpty(linksList)}" style="display:none;">
         <tr th:each="links : ${linksList}" class="table-tr">
             <th scope="row" class="table-th">
                 <div th:if="${not #lists.isEmpty(links)}">

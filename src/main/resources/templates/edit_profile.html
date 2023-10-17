@@ -59,8 +59,10 @@
                             </label>
                         </div>
                         <label>
-                            <textarea type="text" class="links" name="links" th:text="${links}"
-                                      placeholder="Ссылки на личные профили (ссылки через space или Enter)"></textarea>
+                            <input type="text" class="links" name="links" th:text="${links}"
+                                   pattern="(http[s]?:\/\/[\d\w\.]+\/[^\s]+(\n| |$))*"
+                                   placeholder="Ссылки на личные профили (через space или Enter)">
+                            <span class="form__error">Это поле должно содержать только ссылки http/https через пробел или Enter</span>
                         </label>
                         <h3>Обо мне</h3>
                         <p><label>
@@ -69,8 +71,10 @@
                             </textarea>
                         </label></p>
                         <h5 class="telephone" ><label>
-                            <input type="tel" class="telephone" name="telephone" placeholder="+9(999)999-99-99" maxlength="16"
+                            <input type="tel" class="telephone" name="telephone" placeholder="+7(123)456-78-90"
+                                   pattern="[\+]\d{1}[\(]\d{3}[\)]\d{3}[\-]\d{2}[\-]\d{2}"
                                    th:if="${personalData != null}" th:value="${personalData.telephone ?: ''}">
+                            <span class="form__error">Это поле должно содержать телефон в формате +7(123)456-78-90</span>
                         </label></h5>
                     </section>
                 </section>

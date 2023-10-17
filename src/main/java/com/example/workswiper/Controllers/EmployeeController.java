@@ -137,7 +137,7 @@ public class EmployeeController {
         for (Link linkDB: linkFromDB) {
             linkService.delete(linkDB.getId());
         }
-        if (linksTextArea != null) {
+        if (Objects.nonNull(linksTextArea) && !linksTextArea.isEmpty()) {
             linksTextArea = linksTextArea.replace(" ", "\n");
             for (String link : linksTextArea.split("\n")) {
                 String linkText = link.substring(link.indexOf("//") + 2, link.indexOf("/", 8));
