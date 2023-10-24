@@ -79,6 +79,7 @@ public class EmployeeController {
             firstTimeService.save(firstTime);
             return EditProfile();
         }
+        mav.addObject("username", user.getLastName() + " " + user.getFirstName());
         return mav;
     }
 
