@@ -4,6 +4,7 @@ import com.example.workswiper.Domains.FirstTime;
 import com.example.workswiper.Domains.Link;
 import com.example.workswiper.Domains.PersonalData;
 import com.example.workswiper.Domains.Techstack;
+import com.example.workswiper.Funcs.Funcs;
 import com.example.workswiper.Services.FirstTimeService;
 import com.example.workswiper.Services.LinkService;
 import com.example.workswiper.Services.PersonalDataService;
@@ -12,15 +13,12 @@ import com.example.workswiper.User.User;
 import com.example.workswiper.User.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import com.example.workswiper.User.UserServiceImpl;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 @Controller
@@ -38,6 +36,8 @@ public class EmployeeController {
 
     final TechStackService techStackService;
 
+    final Funcs funcs;
+
 
     @Autowired
     public EmployeeController(UserServiceImpl userService, PersonalDataService personalDataService,
@@ -50,26 +50,18 @@ public class EmployeeController {
         this.userRepository = userRepository;
         this.firstTimeService = firstTimeService;
         this.techStackService = techStackService;
-    }
-
-    public User getUserByEmail() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        Matcher matcher = Pattern.compile("(Username=)([^,]+)").matcher(email);
-        if (matcher.find()) {
-            email = matcher.group(2);
-        }
-        return userRepository.findByEmail(email);
+        this.funcs = new Funcs(userRepository, techStackService);
     }
 
     @RequestMapping("edit_profile")
     public ModelAndView EditProfile() {
         ModelAndView mav = new ModelAndView("edit_profile");
-        User user = getUserByEmail();
+        User user = funcs.getUserByEmail();
         List<Techstack> techstackList = techStackService.findAll();
         PersonalData personalData = personalDataService.findByUser_Id(user);
         List<Link> linkList = linkService.findByUser_Id(user);
         List<String> strLinks = linkList.stream().map(Link::getLink).toList();
-        String links = String.join("\n", strLinks);
+        String links = String.join(" ", strLinks);
         mav.addObject(user);
         mav.addObject(techstackList);
         mav.addObject(personalData);
@@ -80,7 +72,7 @@ public class EmployeeController {
     @RequestMapping("/employee")
     public ModelAndView Index() {
         ModelAndView mav = new ModelAndView("employee");
-        User user = getUserByEmail();
+        User user = funcs.getUserByEmail();
         FirstTime firstTime = firstTimeService.findByUser_Id(user);
         if (firstTime.isFirst_time()) {
             firstTime.setFirst_time(false);
@@ -93,7 +85,7 @@ public class EmployeeController {
     @RequestMapping("/profile")
     public ModelAndView MyProfile() {
         ModelAndView mav = new ModelAndView("profile");
-        User user = getUserByEmail();
+        User user = funcs.getUserByEmail();
         PersonalData personalData = personalDataService.findByUser_Id(user);
         List<Link> linkList = linkService.findByUser_Id(user);
         Collection<Techstack> techStackList = user.getTechstacks();
@@ -108,7 +100,7 @@ public class EmployeeController {
 
     @RequestMapping("/save_profile")
     public ModelAndView SaveProfile(HttpServletRequest request) {
-        User user = getUserByEmail();
+        User user =  funcs.getUserByEmail();
         PersonalData personalData = personalDataService.findByUser_Id(user);
         String age = request.getParameter("age");
         if (age != null) personalData.setAge(Long.valueOf(age));
@@ -123,13 +115,7 @@ public class EmployeeController {
         String telephone = request.getParameter("telephone");
         if (telephone != null) personalData.setTelephone(telephone);
         personalDataService.save(personalData);
-        String[] techs = request.getParameterValues("techs");
-        List<Techstack> techstacks = new ArrayList<>();
-        if (techs != null) {
-            for (String tech : techs) {
-                techstacks.add(techStackService.findByTechnology(tech).get());
-            }
-        }
+        List<Techstack> techstacks = funcs.getTechsFromPage(request, "techs");
         user.setTechstacks(techstacks);
         userService.save(user);
         String linksTextArea = request.getParameter("links");

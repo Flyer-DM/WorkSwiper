@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New task</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="../static/css/multiselect.css" th:href="@{/css/multiselect.css}">
+</head>
+<body>
+<div class="outer-div">
+    <blockquote class="blockquote text-center"><h1>Добавить задачу</h1></blockquote>
+    <div class="row">
+        <div class="col-md-8 offset-md-4">
+            <form action="#" th:action="@{/save_task}" th:object="${task}" method="post">
+                <table>
+                    <tr>
+                        <td class="td-edit"><b>Название:</b></td>
+                        <td><label>
+                            <input type="text" maxlength="32" required th:field="*{name}">
+                        </label></td>
+                    </tr>
+                    <tr>
+                        <td class="td-edit"><b>Описание:</b></td>
+                        <td><label>
+                            <textarea maxlength="2048" required th:field="*{description}"></textarea>
+                        </label></td>
+                    </tr>
+                    <tr>
+                        <td class="td-edit"><b>Старт задачи:</b></td>
+                        <td><label>
+                            <input type="date" required th:field="*{starttime}">
+                        </label></td>
+                    </tr>
+                    <tr>
+                        <td class="td-edit"><b>Дедлайн задачи:</b></td>
+                        <td><label>
+                            <input type="date" th:field="*{endtime}">
+                        </label></td>
+                    </tr>
+                    <tr>
+                        <td class="td-edit"><b>Результат:</b></td>
+                        <td><label>
+                            <input type="text" maxlength="2048" required th:field="*{result}">
+                        </label></td>
+                    </tr>
+                    <tr>
+                        <td class="td-edit"><b>Цена:</b></td>
+                        <td><label>
+                            <input type="number" name="price" step="0.01" required>
+                        </label></td>
+                        <td><label>
+                            <select name="currency">
+                                <option>$</option>
+                                <option>₽</option>
+                                <option>€</option>
+                            </select>
+                        </label></td>
+                    </tr>
+                    <tr>
+                        <div th:if="${not #lists.isEmpty(techstack)}">
+                            <label>
+                                <select name="techs" class="table-tr" id="techs" multiple>
+                                    <option th:each="tech : ${techstack}"
+                                            th:value="${tech.technology}" th:text="${tech.technology}">
+                                    </option>
+                                </select>
+                            </label>
+                        </div>
+                        <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag/dist/js/multi-select-tag.js"></script>
+                        <script>
+                            new MultiSelectTag('techs')
+                        </script>
+                    </tr>
+                    <tr>
+                        <td class="td-edit">
+                            <button type="submit" class="btn btn-primary" data-tooggle="button" aria-pressed="false"
+                            >Добавить
+                            </button>
+                        </td>
+                        <td>
+                            <button type="reset" class="btn btn-warning" data-tooggle="button" aria-pressed="false"
+                            >Очистить
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            </tr>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
