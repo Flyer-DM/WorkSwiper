@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,14 @@
 </head>
 
 <body>
+<header>
+    <div class="box-3">
+        <form th:action="@{/profile}" method="post">
+            <input class="my-button" type="submit" value="Профиль">
+        </form>
+        <label th:text="${username}"></label>
+    </div>
+</header>
 <ion-icon id="dislike" name="heart-dislike"></ion-icon>
 <div id="swiper">
     <p class="card-name"></p>
