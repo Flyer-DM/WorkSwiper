@@ -59,23 +59,18 @@ public class EmployerController {
     public ModelAndView index() {
         ModelAndView mav = new ModelAndView("employer");
         List<User> listUsers = userService.getAll();
-        List<PersonalData> personalDataList = new ArrayList<>();
-        List<String> TechStacks = new ArrayList<>();
-        List<List<Link>> linksList = new ArrayList<>();
+        List<UserFullData> userFullDataList = new ArrayList<>();
         List<User> filteredListUsers = listUsers.stream()
                 .filter(u -> Objects.equals(u.getRoles().stream().findFirst().get().getName(), "ROLE_EMPLOYEE"))
                 .toList();
         for (User user: filteredListUsers) {
-            personalDataList.add(personalDataService.findByUser_Id(user));
-            List<String> technologies = user.getTechstacks().stream().map(Techstack::getTechnology).toList();
-            TechStacks.add(String.join(" ", technologies));
-            linksList.add(linkService.findByUser_Id(user));
+            UserFullData userFullData = new UserFullData(user);
+            userFullData.setPersonalData(personalDataService.findByUser_Id(user));
+            userFullData.setLinkList(linkService.findByUser_Id(user));
+            userFullData.setTechstackList((List<Techstack>) user.getTechstacks());
+            userFullDataList.add(userFullData);
         }
-
-        mav.addObject("listUsers", filteredListUsers);
-        mav.addObject(personalDataList);
-        mav.addObject("TechStacks", TechStacks);
-        mav.addObject("linksList", linksList);
+        mav.addObject(userFullDataList);
         return mav;
     }
 
