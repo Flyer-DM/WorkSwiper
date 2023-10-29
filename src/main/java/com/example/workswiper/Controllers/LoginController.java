@@ -17,8 +17,13 @@ public class LoginController {
      * @return имя html страницы с авторизацией.
      */
     @GetMapping("/")
-    public String login() {
+    public String index() {
         return "login";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return index();
     }
 
 }

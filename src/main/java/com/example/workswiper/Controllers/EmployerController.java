@@ -66,8 +66,10 @@ public class EmployerController {
         for (User user: filteredListUsers) {
             UserFullData userFullData = new UserFullData(user);
             userFullData.setPersonalData(personalDataService.findByUser_Id(user));
-            userFullData.setLinkList(linkService.findByUser_Id(user));
-            userFullData.setTechstackList((List<Techstack>) user.getTechstacks());
+            String links = String.join(" ", linkService.findByUser_Id(user).stream().map(Link::getLink).toList());
+            userFullData.setTechstackList(links);
+            String techs = String.join(" ", user.getTechstacks().stream().map(Techstack::getTechnology).toList());
+            userFullData.setTechstackList(techs);
             userFullDataList.add(userFullData);
         }
         mav.addObject(userFullDataList);

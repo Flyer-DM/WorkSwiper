@@ -10,9 +10,9 @@ public class UserFullData {
 
     private PersonalData personalData;
 
-    private List<Techstack> techstackList;
+    private String techstackList;
 
-    private List<Link> linkList;
+    private String linkList;
 
     public UserFullData(User user) {
         this.user = user;
@@ -34,19 +34,19 @@ public class UserFullData {
         this.personalData = personalData;
     }
 
-    public List<Techstack> getTechstackList() {
+    public String getTechstackList() {
         return techstackList;
     }
 
-    public void setTechstackList(List<Techstack> techstackList) {
+    public void setTechstackList(String techstackList) {
         this.techstackList = techstackList;
     }
 
-    public List<Link> getLinkList() {
+    public String getLinkList() {
         return linkList;
     }
 
-    public void setLinkList(List<Link> linkList) {
+    public void setLinkList(String linkList) {
         this.linkList = linkList;
     }
 }
