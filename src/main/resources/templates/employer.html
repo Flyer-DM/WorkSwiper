@@ -30,22 +30,10 @@
     </div>
 </nav>
 <table id="1" class="table table-striped table-hover" style="display:none;">
-    <thead>
-    <tr>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-    </tr>
-    </thead>
     <tbody>
     <div th:if="${not #lists.isEmpty(userFullDataList)}">
         <tr th:each="userdata : ${userFullDataList}" class="table-tr">
+            <th scope="row" class="table-th" th:text="${userdata.user.id}"></th>
             <th scope="row" class="table-th" th:text="${userdata.user.firstName}"></th>
             <th scope="row" class="table-th" th:text="${userdata.user.lastName}"></th>
             <th scope="row" class="table-th" th:text="${userdata.user.email}"></th>
@@ -61,10 +49,24 @@
     </div>
     </tbody>
 </table>
+
+<div id="cardCount" style="margin-top: 10px; font-weight: bold;">Количество карточек: 0</div>
+
+<div name = "liked" id="cardCount2" style="margin-top: 10px; font-weight: bold;"></div>
+
+<div id="cardCount3" style="margin-top: 10px; font-weight: bold;"></div>
+
+<div>
+    <form th:action="@{/admin}" method="post">
+        <input class="btn btn-light" type="submit" value="Назад">
+    </form>
+</div>
+
 <div class="card-all-cards">
 
     <ion-icon id="dislike" name="heart-dislike"></ion-icon>
     <div id="swiper">
+        <p class="card-id"></p>
         <p class="card-firstname"></p>
         <p class="card-lastname"></p>
         <p class="card-email"></p>
@@ -76,11 +78,11 @@
         <p class="card-aboutme"></p>
     </div>
     <ion-icon id="like" name="heart"></ion-icon>
-<div/>
+</div>
 </div>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
+<br>
 </body>
 
 <script lang="JavaScript">
@@ -89,6 +91,7 @@
                         onDismiss,
                         onLike,
                         onDislike,
+                        user_ID,
                         FirstName,
                         LastName,
                         Email,
@@ -102,6 +105,7 @@
             this.onDismiss = onDismiss;
             this.onLike = onLike;
             this.onDislike = onDislike;
+            this.user_ID = user_ID;
             this.FirstName = FirstName;
             this.LastName = LastName;
             this.Email = Email;
@@ -129,6 +133,11 @@
         #init = () => {
             const card = document.createElement('div');
             card.classList.add('card');
+
+            const textElementID = document.createElement('p');
+            textElementID.textContent = this.user_ID;
+            textElementID.classList.add('card-id');
+            card.append(textElementID);
 
             const textElement = document.createElement('p');
             textElement.textContent = this.FirstName;
@@ -291,6 +300,7 @@
         'https://source.unsplash.com/random/1000x1000/?forest'
     ];
 
+    const user_ID = [];
     const names = [];
     const lastname = [];
     const email = [];
@@ -307,34 +317,49 @@
 
     for (let i = 0; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName('th');
-        if (cells.length === 3) {
-            names.push(cells[0].textContent.trim());
-            lastname.push(cells[1].textContent.trim());
-            email.push(cells[2].textContent);
-        } else if (cells.length > 3) {
-            telephone.push(cells[0].textContent.trim());
-            age.push(cells[1].textContent.trim());
-            country.push(cells[2].textContent.trim());
-            city.push(cells[3].textContent.trim());
-            education.push(cells[4].textContent.trim());
-            aboutme.push(cells[5].textContent.trim());
-        }
+
+        user_ID.push(cells[0].textContent.trim());
+        names.push(cells[1].textContent.trim());
+        lastname.push(cells[2].textContent.trim());
+        email.push(cells[3].textContent);
+        telephone.push(cells[4].textContent.trim());
+        age.push(cells[5].textContent.trim());
+        country.push(cells[6].textContent.trim());
+        city.push(cells[7].textContent.trim());
+        education.push(cells[8].textContent.trim());
+        aboutme.push(cells[9].textContent.trim());
+
     }
-
-
-
-
-
-
-
 
     // variables
     let cardCount = 0;
+    let b = -1;
+
+    function updateCardCount() {
+        const cardCountElement = document.getElementById('cardCount');
+        cardCountElement.textContent = `Количество карточек: ${cardCount}`;
+    }
+
+    let likedCards = [];
+    let dislikedCards = [];
+
+    function updateCardLiked(cardUserID) {
+        likedCards.push(cardUserID[b]);
+        const cardCount2Element = document.getElementById('cardCount2');
+        cardCount2Element.textContent = `${likedCards}`;
+    }
+
+    function updateCardDisliked(cardUserID) {
+        dislikedCards.push(cardUserID[b]);
+        const cardCountElement = document.getElementById('cardCount3');
+        cardCountElement.textContent = `${dislikedCards}`;
+    }
+
 
     // functions
     function appendNewCard() {
         const card = new Card({
-            imageUrl: urls[cardCount],
+            user_ID: user_ID[cardCount],
             FirstName: names[cardCount],
             LastName: lastname[cardCount],
             Email: email[cardCount],
@@ -345,14 +370,28 @@
             Education: education[cardCount],
             AboutMe: aboutme[cardCount],
 
-            onDismiss: appendNewCard,
+            onDismiss: () => {
+                appendNewCard();
+                updateCardCount();
+            },
             onLike: () => {
+                b ++;
+                updateCardLiked(user_ID);
                 like.style.animationPlayState = 'running';
                 like.classList.toggle('trigger');
+
+                const form = document.querySelector('form');
+                form.submit();
             },
             onDislike: () => {
+                b ++;
+                updateCardDisliked(user_ID)
                 dislike.style.animationPlayState = 'running';
                 dislike.classList.toggle('trigger');
+
+                // Находим форму и вызываем метод submit
+                const form = document.querySelector('form');
+                form.submit();
             }
         });
 
@@ -364,13 +403,18 @@
         cards.forEach((card, index) => {
             card.style.setProperty('--i', index);
         });
+
+        updateCardCount();
     }
 
 
     // first 5 cards
-    for (let i = 0; i < 5; i++) {
+    const a = names.length;
+
+    for (let i = 0; i < names.length; i++) {
         appendNewCard();
     }
+
 
 
 </script>
