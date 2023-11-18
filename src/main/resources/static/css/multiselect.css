@@ -1,4 +1,6 @@
 .mult-select-tag {
+    left: 354px;
+    top: -210px;
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -20,7 +22,8 @@
     background: #fff;
     min-height: 2.15rem;
     width: 100%;
-    min-width: 14rem
+    min-width: 14rem;
+    background: rgba(0, 0, 0, 0);
 }
 
 .mult-select-tag .input-container {
