@@ -50,9 +50,15 @@
 
 <div id="cardCount" style="margin-top: 10px; font-weight: bold;">Количество карточек: 0</div>
 
-<div id="cardCount2" style="margin-top: 10px; font-weight: bold;">Like: 0</div>
+<div name = "liked" id="cardCount2" style="margin-top: 10px; font-weight: bold;"></div>
 
-<div id="cardCount3" style="margin-top: 10px; font-weight: bold;">Dislike: 0</div>
+<div id="cardCount3" style="margin-top: 10px; font-weight: bold;"></div>
+
+<div>
+    <form th:action="@{/admin}" method="post">
+        <input class="btn btn-light" type="submit" value="Назад">
+    </form>
+</div>
 
 <div class="card-all-cards">
 
@@ -338,13 +344,13 @@
     function updateCardLiked(cardUserID) {
         likedCards.push(cardUserID[b]);
         const cardCount2Element = document.getElementById('cardCount2');
-        cardCount2Element.textContent = `Like: ${likedCards}`;
+        cardCount2Element.textContent = `${likedCards}`;
     }
 
     function updateCardDisliked(cardUserID) {
         dislikedCards.push(cardUserID[b]);
         const cardCountElement = document.getElementById('cardCount3');
-        cardCountElement.textContent = `Dislike: ${dislikedCards}`;
+        cardCountElement.textContent = `${dislikedCards}`;
     }
 
 
@@ -371,12 +377,19 @@
                 updateCardLiked(user_ID);
                 like.style.animationPlayState = 'running';
                 like.classList.toggle('trigger');
+
+                const form = document.querySelector('form');
+                form.submit();
             },
             onDislike: () => {
                 b ++;
                 updateCardDisliked(user_ID)
                 dislike.style.animationPlayState = 'running';
                 dislike.classList.toggle('trigger');
+
+                // Находим форму и вызываем метод submit
+                const form = document.querySelector('form');
+                form.submit();
             }
         });
 
