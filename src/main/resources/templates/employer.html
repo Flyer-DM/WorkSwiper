@@ -15,13 +15,13 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-    <a class="navbar-brand" href="/">WorkSwiper</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" th:href="@{/employer}">WorkSwiper</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" th:href="@{/employer}">Главная страница</a>
             <a class="nav-item nav-link" th:href="@{/new_task}">Создать задачу</a>
             <a class="nav-item nav-link" th:href="@{/my_tasks}">Мои задачи</a>
             <a class="nav-item nav-link" th:href="@{/starred}">Отмеченные пользователи</a>
@@ -50,15 +50,12 @@
     </tbody>
 </table>
 
-<div id="cardCount" style="margin-top: 10px; font-weight: bold;">Количество карточек: 0</div>
-
-<div name = "liked" id="cardCount2" style="margin-top: 10px; font-weight: bold;"></div>
-
-<div id="cardCount3" style="margin-top: 10px; font-weight: bold;"></div>
-
 <div>
-    <form th:action="@{/admin}" method="post">
-        <input class="btn btn-light" type="submit" value="Назад">
+    <form th:action="@{/check_cards}" method="post">
+        <div id="cardCount" style="display: none"></div>
+        <label for="cardCount2"></label><textarea name="cardCount2" id="cardCount2" style="display: none"></textarea>
+        <label for="cardCount3"></label><textarea name="cardCount3" id="cardCount3" style="display: none"></textarea>
+        <input class="btn btn-light" type="submit" value="Назад" style="display: none">
     </form>
 </div>
 
@@ -197,8 +194,8 @@
             this.element.addEventListener('touchstart', (e) => {
                 const touch = e.changedTouches[0];
                 if (!touch) return;
-                const { clientX, clientY } = touch;
-                this.#startPoint = { x: clientX, y: clientY }
+                const {clientX, clientY} = touch;
+                this.#startPoint = {x: clientX, y: clientY}
                 document.addEventListener('touchmove', this.#handleTouchMove);
                 this.element.style.transition = 'transform 0s';
             });
@@ -209,8 +206,8 @@
 
         #listenToMouseEvents = () => {
             this.element.addEventListener('mousedown', (e) => {
-                const { clientX, clientY } = e;
-                this.#startPoint = { x: clientX, y: clientY }
+                const {clientX, clientY} = e;
+                this.#startPoint = {x: clientX, y: clientY}
                 document.addEventListener('mousemove', this.#handleMouseMove);
                 this.element.style.transition = 'transform 0s';
             });
@@ -238,7 +235,7 @@
         #handleMouseMove = (e) => {
             e.preventDefault();
             if (!this.#startPoint) return;
-            const { clientX, clientY } = e;
+            const {clientX, clientY} = e;
             this.#handleMove(clientX, clientY);
         }
 
@@ -253,7 +250,7 @@
             if (!this.#startPoint) return;
             const touch = e.changedTouches[0];
             if (!touch) return;
-            const { clientX, clientY } = touch;
+            const {clientX, clientY} = touch;
             this.#handleMove(clientX, clientY);
         }
 
@@ -286,6 +283,7 @@
             }
         }
     }
+
     // DOM
     const swiper = document.querySelector('#swiper');
     const like = document.querySelector('#like');
@@ -375,7 +373,7 @@
                 updateCardCount();
             },
             onLike: () => {
-                b ++;
+                b++;
                 updateCardLiked(user_ID);
                 like.style.animationPlayState = 'running';
                 like.classList.toggle('trigger');
@@ -384,7 +382,7 @@
                 form.submit();
             },
             onDislike: () => {
-                b ++;
+                b++;
                 updateCardDisliked(user_ID)
                 dislike.style.animationPlayState = 'running';
                 dislike.classList.toggle('trigger');
@@ -414,7 +412,6 @@
     for (let i = 0; i < names.length; i++) {
         appendNewCard();
     }
-
 
 
 </script>

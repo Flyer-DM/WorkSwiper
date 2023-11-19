@@ -1,14 +1,8 @@
 package com.example.workswiper.Controllers;
 
-import com.example.workswiper.Domains.FirstTime;
-import com.example.workswiper.Domains.Link;
-import com.example.workswiper.Domains.PersonalData;
-import com.example.workswiper.Domains.Techstack;
+import com.example.workswiper.Domains.*;
 import com.example.workswiper.Funcs.Funcs;
-import com.example.workswiper.Services.FirstTimeService;
-import com.example.workswiper.Services.LinkService;
-import com.example.workswiper.Services.PersonalDataService;
-import com.example.workswiper.Services.TechStackService;
+import com.example.workswiper.Services.*;
 import com.example.workswiper.User.User;
 import com.example.workswiper.User.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.workswiper.User.UserServiceImpl;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Controller
@@ -36,12 +32,14 @@ public class EmployeeController {
 
     final TechStackService techStackService;
 
+    final TaskService taskService;
+
     final Funcs funcs;
 
 
     @Autowired
     public EmployeeController(UserServiceImpl userService, PersonalDataService personalDataService,
-                              LinkService linkService, UserRepository userRepository,
+                              LinkService linkService, UserRepository userRepository, TaskService taskService,
                               FirstTimeService firstTimeService, TechStackService techStackService) {
         super();
         this.userService = userService;
@@ -50,6 +48,7 @@ public class EmployeeController {
         this.userRepository = userRepository;
         this.firstTimeService = firstTimeService;
         this.techStackService = techStackService;
+        this.taskService = taskService;
         this.funcs = new Funcs(userRepository, techStackService);
     }
 
@@ -79,6 +78,12 @@ public class EmployeeController {
             firstTimeService.save(firstTime);
             return EditProfile();
         }
+        List<Task> allTasks = taskService.findAll();
+        List<Task> tasksSeen = (List<Task>) user.getTask_seen();
+        List<Task> taskStared = (List<Task>) user.getTask_stared();
+        List<Task> allTasksSeen = Stream.concat(tasksSeen.stream(), taskStared.stream()).toList();
+        List<Task> tasks = allTasks.stream().filter(f -> !allTasksSeen.contains(f)).toList();
+        mav.addObject("tasks", tasks);
         mav.addObject("username", user.getLastName() + " " + user.getFirstName());
         return mav;
     }

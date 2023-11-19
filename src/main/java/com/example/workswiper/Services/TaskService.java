@@ -5,6 +5,8 @@ import com.example.workswiper.Repos.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class TaskService {
@@ -27,6 +29,10 @@ public class TaskService {
 
     public Task get(Long id){
         return taskRepository.findById(id).get();
+    }
+
+    public List<Task> findAll(){
+        return taskRepository.findAll();
     }
 
 }

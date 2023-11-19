@@ -5,62 +5,107 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee</title>
+    <title>Employer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="../static/css/card.css" th:href="@{/css/card.css}">
+
 </head>
 
 <body>
-<header>
-    <div class="box-3">
-        <form th:action="@{/profile}" method="post">
-            <input class="my-button" type="submit" value="Профиль">
-        </form>
-        <label th:text="${username}"></label>
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" th:href="@{/employee}">WorkSwiper</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" th:href="@{/task_archive}">Просмотренные задачи</a>
+            <a class="nav-item nav-link" th:href="@{/task_doing}">Отмеченные задачи</a>
+            <a class="nav-item nav-link" th:href="@{/profile}">Мой профиль</a>
+            <label class="nav-item nav-link" style="color: midnightblue" th:text="${username}"></label>
+            <a class="btn btn-outline-danger my-2 my-sm-0" type="submit" href="/logout">Выйти</a>
+        </div>
     </div>
-</header>
-<ion-icon id="dislike" name="heart-dislike"></ion-icon>
-<div id="swiper">
-    <p class="card-name"></p>
-    <p class="card-description"></p>
-    <p class="card-stack"></p>
-    <p class="card-datestart"></p>
-    <p class="card-dateend"></p>
-    <p class="card-result"></p>
-    <p class="card-price"></p>
+</nav>
+<table id="1" class="table table-striped table-hover" style="display:none;">
+    <tbody>
+    <div th:if="${not #lists.isEmpty(tasks)}">
+        <tr th:each="task : ${tasks}" class="table-tr">
+            <th scope="row" class="table-th" th:text="${task.id}"></th>
+            <th scope="row" class="table-th" th:text="${task.user_id.lastName} + ' ' + ${task.user_id.firstName}"></th>
+            <th scope="row" class="table-th" th:text="${task.name}"></th>
+            <th scope="row" class="table-th" th:text="${task.description}"></th>
+            <th scope="row" class="table-th" th:text="${task.starttime}"></th>
+            <th scope="row" class="table-th" th:text="${task.endtime}"></th>
+            <th scope="row" class="table-th" th:text="${task.result}"></th>
+            <th scope="row" class="table-th" th:text="${task.price_id.amount}"></th>
+            <th scope="row" class="table-th" th:text="${task.price_id.currency}"></th>
+        </tr>
+    </div>
+    </tbody>
+</table>
+
+<div>
+    <form th:action="@{/employee}" method="post">
+        <div id="cardCount" style="display: none"></div>
+        <label for="cardCount2"></label><textarea name="cardCount2" id="cardCount2" style="display: none"></textarea>
+        <label for="cardCount3"></label><textarea name="cardCount3" id="cardCount3" style="display: none"></textarea>
+        <input class="btn btn-light" type="submit" value="Назад" style="display: none">
+    </form>
 </div>
-<ion-icon id="like" name="heart"></ion-icon>
 
-
+<div class="card-all-cards">
+    <ion-icon id="dislike" name="heart-dislike"></ion-icon>
+    <div id="swiper">
+        <p class="task-id"></p>
+        <p class="task-author"></p>
+        <p class="task-name"></p>
+        <p class="task-description"></p>
+        <p class="task-starttime"></p>
+        <p class="task-endtime"></p>
+        <p class="task-result"></p>
+        <p class="task-amount"></p>
+        <p class="task-currency"></p>
+    </div>
+    <ion-icon id="like" name="heart"></ion-icon>
+</div>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<br>
 </body>
 
 <script lang="JavaScript">
+
     class Card {
         constructor({
-                        imageUrl,
                         onDismiss,
                         onLike,
                         onDislike,
-                        Name,
-                        Description,
-                        Stack,
-                        DateStart,
-                        DateEnd,
-                        Result,
-                        Price
+                        task_ID,
+                        name,
+                        author,
+                        description,
+                        starttime,
+                        endtime,
+                        result,
+                        amount,
+                        currency
                     }) {
-            this.imageUrl = imageUrl;
             this.onDismiss = onDismiss;
             this.onLike = onLike;
             this.onDislike = onDislike;
-            this.Name = Name;
-            this.Description = Description;
-            this.Stack = Stack;
-            this.DateStart = DateStart;
-            this.DateEnd = DateEnd;
-            this.Result = Result;
-            this.Price = Price;
+            this.task_ID = task_ID;
+            this.author = author;
+            this.name = name;
+            this.description = description;
+            this.starttime = starttime;
+            this.endtime = endtime;
+            this.result = result;
+            this.amount = amount;
+            this.currency = currency;
 
             this.#init();
         }
@@ -79,44 +124,52 @@
         #init = () => {
             const card = document.createElement('div');
             card.classList.add('card');
-            const img = document.createElement('img');
-            img.src = this.imageUrl;
 
+            const textElementID = document.createElement('p');
+            textElementID.textContent = this.task_ID;
+            textElementID.classList.add('task-id');
+            card.append(textElementID);
 
             const textElement = document.createElement('p');
-            textElement.textContent = this.Name;
-            textElement.classList.add('card-name');
+            textElement.textContent = this.author;
+            textElement.classList.add('task-author');
             card.append(textElement);
 
+            const textElement1 = document.createElement('p');
+            textElement1.textContent = this.name;
+            textElement1.classList.add('task-name');
+            card.append(textElement1);
+
             const textElement2 = document.createElement('p');
-            textElement2.textContent = this.Description;
-            textElement2.classList.add('card-description');
+            textElement2.textContent = this.description;
+            textElement2.classList.add('task-description');
             card.append(textElement2);
 
             const textElement3 = document.createElement('p');
-            textElement3.textContent = this.Stack;
-            textElement3.classList.add('card-stack');
+            textElement3.textContent = this.starttime;
+            textElement3.classList.add('task-starttime');
             card.append(textElement3);
 
             const textElement4 = document.createElement('p');
-            textElement4.textContent = this.DateStart;
-            textElement4.classList.add('card-datestart');
+            textElement4.textContent = this.endtime;
+            textElement4.classList.add('task-endtime');
             card.append(textElement4);
 
             const textElement5 = document.createElement('p');
-            textElement5.textContent = this.DateEnd;
-            textElement5.classList.add('card-dateend');
+            textElement5.textContent = this.result;
+            textElement5.classList.add('task-result');
             card.append(textElement5);
 
             const textElement6 = document.createElement('p');
-            textElement6.textContent = this.Result;
-            textElement6.classList.add('card-result');
+            textElement6.textContent = this.amount;
+            textElement6.classList.add('task-amount');
             card.append(textElement6);
 
             const textElement7 = document.createElement('p');
-            textElement7.textContent = this.Price;
-            textElement7.classList.add('card-price');
+            textElement7.textContent = this.currency;
+            textElement7.classList.add('task-currency');
             card.append(textElement7);
+
 
             this.element = card;
             if (this.#isTouchDevice()) {
@@ -130,8 +183,8 @@
             this.element.addEventListener('touchstart', (e) => {
                 const touch = e.changedTouches[0];
                 if (!touch) return;
-                const { clientX, clientY } = touch;
-                this.#startPoint = { x: clientX, y: clientY }
+                const {clientX, clientY} = touch;
+                this.#startPoint = {x: clientX, y: clientY}
                 document.addEventListener('touchmove', this.#handleTouchMove);
                 this.element.style.transition = 'transform 0s';
             });
@@ -142,8 +195,8 @@
 
         #listenToMouseEvents = () => {
             this.element.addEventListener('mousedown', (e) => {
-                const { clientX, clientY } = e;
-                this.#startPoint = { x: clientX, y: clientY }
+                const {clientX, clientY} = e;
+                this.#startPoint = {x: clientX, y: clientY}
                 document.addEventListener('mousemove', this.#handleMouseMove);
                 this.element.style.transition = 'transform 0s';
             });
@@ -171,7 +224,7 @@
         #handleMouseMove = (e) => {
             e.preventDefault();
             if (!this.#startPoint) return;
-            const { clientX, clientY } = e;
+            const {clientX, clientY} = e;
             this.#handleMove(clientX, clientY);
         }
 
@@ -186,7 +239,7 @@
             if (!this.#startPoint) return;
             const touch = e.changedTouches[0];
             if (!touch) return;
-            const { clientX, clientY } = touch;
+            const {clientX, clientY} = touch;
             this.#handleMove(clientX, clientY);
         }
 
@@ -219,6 +272,7 @@
             }
         }
     }
+
     // DOM
     const swiper = document.querySelector('#swiper');
     const like = document.querySelector('#like');
@@ -233,30 +287,95 @@
         'https://source.unsplash.com/random/1000x1000/?forest'
     ];
 
+    const task_ID = [];
+    const author = [];
+    const name = [];
+    const description = [];
+    const starttime = [];
+    const endtime = [];
+    const result = [];
+    const amount = [];
+    const currency = [];
+
+    // Перебираем строки таблицы и добавляем данные в соответствующие списки
+    const table = document.getElementById('1');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('th');
+
+        task_ID.push(cells[0].textContent.trim());
+        author.push(cells[1].textContent.trim());
+        name.push(cells[2].textContent.trim());
+        description.push(cells[3].textContent.trim());
+        starttime.push(cells[4].textContent);
+        endtime.push(cells[5].textContent.trim());
+        result.push(cells[6].textContent.trim());
+        amount.push(cells[7].textContent.trim());
+        currency.push(cells[8].textContent.trim());
+
+    }
+
     // variables
     let cardCount = 0;
+    let b = -1;
+
+    function updateCardCount() {
+        const cardCountElement = document.getElementById('cardCount');
+        cardCountElement.textContent = `Количество карточек: ${cardCount}`;
+    }
+
+    let likedCards = [];
+    let dislikedCards = [];
+
+    function updateCardLiked(cardUserID) {
+        likedCards.push(cardUserID[b]);
+        const cardCount2Element = document.getElementById('cardCount2');
+        cardCount2Element.textContent = `${likedCards}`;
+    }
+
+    function updateCardDisliked(cardUserID) {
+        dislikedCards.push(cardUserID[b]);
+        const cardCountElement = document.getElementById('cardCount3');
+        cardCountElement.textContent = `${dislikedCards}`;
+    }
+
 
     // functions
     function appendNewCard() {
         const card = new Card({
-            imageUrl: urls[cardCount % 5],
-            Name: "Создание веб приложения",
-            Description: "Очень хорошего приложения!",
-            Stack: "Стек технологий",
-            DateStart: "20 июня",
-            DateEnd: "31 июня",
-            Result: "Нужно чтобы было реально круто и удобно!",
-            Price: "100 Евро",
+            task_ID: task_ID[cardCount],
+            author: author[cardCount],
+            name: name[cardCount],
+            description: description[cardCount],
+            starttime: starttime[cardCount],
+            endtime: endtime[cardCount],
+            result: result[cardCount],
+            amount: amount[cardCount],
+            currency: currency[cardCount],
 
-
-            onDismiss: appendNewCard,
+            onDismiss: () => {
+                appendNewCard();
+                updateCardCount();
+            },
             onLike: () => {
+                b++;
+                updateCardLiked(task_ID);
                 like.style.animationPlayState = 'running';
                 like.classList.toggle('trigger');
+
+                const form = document.querySelector('form');
+                form.submit();
             },
             onDislike: () => {
+                b++;
+                updateCardDisliked(task_ID)
                 dislike.style.animationPlayState = 'running';
                 dislike.classList.toggle('trigger');
+
+                // Находим форму и вызываем метод submit
+                const form = document.querySelector('form');
+                form.submit();
             }
         });
 
@@ -268,14 +387,17 @@
         cards.forEach((card, index) => {
             card.style.setProperty('--i', index);
         });
+
+        updateCardCount();
     }
 
 
     // first 5 cards
-    for (let i = 0; i < 5; i++) {
+    const a = name.length;
+
+    for (let i = 0; i < name.length; i++) {
         appendNewCard();
     }
-
 
 </script>
 

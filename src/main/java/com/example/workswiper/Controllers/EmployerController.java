@@ -9,8 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.example.workswiper.User.UserServiceImpl;
 
@@ -97,5 +96,12 @@ public class EmployerController {
         task.setTechstacks(techstacks);
         taskService.save(task);
         return "redirect:/employer";
+    }
+
+    @RequestMapping("/check_cards")
+    public ModelAndView lookForCards(HttpServletRequest request) {
+        System.out.println("liked: " + request.getParameter("cardCount2"));
+        System.out.println("DISliked: " + request.getParameter("cardCount3"));
+        return index();
     }
 }

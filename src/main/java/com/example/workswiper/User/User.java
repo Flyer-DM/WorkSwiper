@@ -1,5 +1,6 @@
 package com.example.workswiper.User;
 
+import com.example.workswiper.Domains.Task;
 import com.example.workswiper.Domains.Techstack;
 import jakarta.persistence.*;
 
@@ -39,6 +40,31 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "tech_id", referencedColumnName = "id"))
     private Collection<Techstack> techstacks;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "task_seen", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
+    private Collection<Task> task_seen;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "task_stared", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
+    private Collection<Task> task_stared;
+
+    public Collection<Task> getTask_seen() {
+        return task_seen;
+    }
+
+    public void setTask_seen(Collection<Task> task_seen) {
+        this.task_seen = task_seen;
+    }
+
+    public Collection<Task> getTask_stared() {
+        return task_stared;
+    }
+
+    public void setTask_stared(Collection<Task> task_stared) {
+        this.task_stared = task_stared;
+    }
 
     public User() {
     }
