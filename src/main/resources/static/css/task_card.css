@@ -1,9 +1,18 @@
+html,
 body {
-    background: #E5E5E5;
+    min-height: 100vh;
+    background: linear-gradient(0deg, rgb(34, 75, 239), rgb(38, 188, 253));
+    background-size: cover;
 }
 
 input::placeholder {
     text-align: center;
+    color: #434B4D;
+}
+
+textarea::placeholder {
+    text-align: center;
+    color: #434B4D;
 }
 
 .e1_12 {
@@ -97,6 +106,7 @@ input::placeholder {
     letter-spacing: 0;
     border: none;
     background: rgba(0, 0, 0, 0);
+
 }
 
 .description {

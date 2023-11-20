@@ -6,6 +6,7 @@ import com.example.workswiper.Services.*;
 import com.example.workswiper.User.User;
 import com.example.workswiper.User.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.workswiper.User.UserServiceImpl;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -53,7 +53,7 @@ public class EmployeeController {
     }
 
     @RequestMapping("edit_profile")
-    public ModelAndView EditProfile() {
+    public ModelAndView editProfile() {
         ModelAndView mav = new ModelAndView("edit_profile");
         User user = funcs.getUserByEmail();
         List<Techstack> techstackList = techStackService.findAll();
@@ -69,14 +69,14 @@ public class EmployeeController {
     }
 
     @RequestMapping("/employee")
-    public ModelAndView Index() {
+    public ModelAndView index() {
         ModelAndView mav = new ModelAndView("employee");
         User user = funcs.getUserByEmail();
         FirstTime firstTime = firstTimeService.findByUser_Id(user);
         if (firstTime.isFirst_time()) {
             firstTime.setFirst_time(false);
             firstTimeService.save(firstTime);
-            return EditProfile();
+            return editProfile();
         }
         List<Task> allTasks = taskService.findAll();
         List<Task> tasksSeen = (List<Task>) user.getTask_seen();
@@ -89,7 +89,7 @@ public class EmployeeController {
     }
 
     @RequestMapping("/profile")
-    public ModelAndView MyProfile() {
+    public ModelAndView myProfile() {
         ModelAndView mav = new ModelAndView("profile");
         User user = funcs.getUserByEmail();
         PersonalData personalData = personalDataService.findByUser_Id(user);
@@ -105,8 +105,8 @@ public class EmployeeController {
     }
 
     @RequestMapping("/save_profile")
-    public ModelAndView SaveProfile(HttpServletRequest request) {
-        User user =  funcs.getUserByEmail();
+    public ModelAndView saveProfile(HttpServletRequest request) {
+        User user = funcs.getUserByEmail();
         PersonalData personalData = personalDataService.findByUser_Id(user);
         String age = request.getParameter("age");
         if (age != null) personalData.setAge(Long.valueOf(age));
@@ -126,7 +126,7 @@ public class EmployeeController {
         userService.save(user);
         String linksTextArea = request.getParameter("links");
         List<Link> linkFromDB = linkService.findByUser_Id(user);
-        for (Link linkDB: linkFromDB) {
+        for (Link linkDB : linkFromDB) {
             linkService.delete(linkDB.getId());
         }
         if (Objects.nonNull(linksTextArea) && !linksTextArea.isEmpty()) {
@@ -136,6 +136,32 @@ public class EmployeeController {
                 linkService.save(new Link(linkText, link, user));
             }
         }
-        return MyProfile();
+        return myProfile();
+    }
+
+    @RequestMapping("/check_likes")
+    public ModelAndView updateLikes(HttpServletRequest request) {
+        String liked = request.getParameter("cardCount2");
+        if (Strings.isNotEmpty(liked)) {
+            User user = funcs.getUserByEmail();
+            Collection<Task> like = new ArrayList<>();
+            like.add(taskService.get(Long.valueOf(liked)));
+            user.setTask_stared(like);
+            userService.save(user);
+        }
+        return index();
+    }
+
+    @RequestMapping("/check_dislikes")
+    public ModelAndView updateDislikes(HttpServletRequest request) {
+        String disliked = request.getParameter("cardCount3");
+        if (Strings.isNotEmpty(disliked)) {
+            User user = funcs.getUserByEmail();
+            Collection<Task> dislike = new ArrayList<>();
+            dislike.add(taskService.get(Long.valueOf(disliked)));
+            user.setTask_seen(dislike);
+            userService.save(user);
+        }
+        return index();
     }
 }
