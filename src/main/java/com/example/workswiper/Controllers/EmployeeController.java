@@ -79,11 +79,31 @@ public class EmployeeController {
             return editProfile();
         }
         List<Task> allTasks = taskService.findAll();
-        List<Task> tasksSeen = (List<Task>) user.getTask_seen();
-        List<Task> taskStared = (List<Task>) user.getTask_stared();
-        List<Task> allTasksSeen = Stream.concat(tasksSeen.stream(), taskStared.stream()).toList();
+        List<Task> allTasksSeen = Stream.concat(user.getTask_seen().stream(), user.getTask_stared().stream()).toList();
         List<Task> tasks = allTasks.stream().filter(f -> !allTasksSeen.contains(f)).toList();
         mav.addObject("tasks", tasks);
+        mav.addObject("hide", false);
+        mav.addObject("username", user.getLastName() + " " + user.getFirstName());
+        return mav;
+    }
+
+    @RequestMapping("/task_archive")
+    public ModelAndView archivedIndex() {
+        ModelAndView mav = new ModelAndView("employee");
+        User user = funcs.getUserByEmail();
+        List<Task> tasksSeen = (List<Task>) user.getTask_seen();
+        mav.addObject("tasks", tasksSeen);
+        mav.addObject("hide", true);
+        mav.addObject("username", user.getLastName() + " " + user.getFirstName());
+        return mav;
+    }
+
+    @RequestMapping("/task_doing")
+    public ModelAndView staredIndex() {
+        ModelAndView mav = new ModelAndView("starred_cards");
+        User user = funcs.getUserByEmail();
+        List<Task> tasksSeen = (List<Task>) user.getTask_stared();
+        mav.addObject("tasks", tasksSeen);
         mav.addObject("username", user.getLastName() + " " + user.getFirstName());
         return mav;
     }
@@ -141,7 +161,7 @@ public class EmployeeController {
 
     @RequestMapping("/check_likes")
     public ModelAndView updateLikes(HttpServletRequest request) {
-        String liked = request.getParameter("cardCount2");
+        String liked = request.getParameter("likedCard");
         if (Strings.isNotEmpty(liked)) {
             User user = funcs.getUserByEmail();
             Collection<Task> like = new ArrayList<>();
@@ -154,7 +174,7 @@ public class EmployeeController {
 
     @RequestMapping("/check_dislikes")
     public ModelAndView updateDislikes(HttpServletRequest request) {
-        String disliked = request.getParameter("cardCount3");
+        String disliked = request.getParameter("dislikedCard");
         if (Strings.isNotEmpty(disliked)) {
             User user = funcs.getUserByEmail();
             Collection<Task> dislike = new ArrayList<>();
