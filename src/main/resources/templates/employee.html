@@ -57,10 +57,18 @@
 
 <div>
     <div id="cardCount" style="display: none"></div>
-        <form id="form-like" th:action="@{check_likes}" method="post">
+    <div th:if="${!hide}">
+        <form id="form-like" th:action="@{/check_likes}" method="post">
             <label for="likedCard"></label><textarea name="likedCard" id="likedCard" style="display: none"></textarea>
             <input type="submit" style="display: none">
         </form>
+    </div>
+    <div th:if="${hide}">
+        <form id="form-like" th:action="@{/check_likes_archive}" method="post">
+            <label for="likedCard"></label><textarea name="likedCard" id="likedCard" style="display: none"></textarea>
+            <input type="submit" style="display: none">
+        </form>
+    </div>
     <div th:if="${!hide}">
         <form id="form-dislike" th:action="@{/check_dislikes}" method="post">
             <label for="dislikedCard"></label><textarea name="dislikedCard" id="dislikedCard"

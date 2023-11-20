@@ -172,6 +172,27 @@ public class EmployeeController {
         return index();
     }
 
+    @RequestMapping("/check_likes_archive")
+    public ModelAndView updateLikesArchive(HttpServletRequest request) {
+        String liked = request.getParameter("likedCard");
+        if (Strings.isNotEmpty(liked)) {
+            User user = funcs.getUserByEmail();
+            Long likeId = Long.valueOf(liked);
+            Collection<Task> alreadyLiked = user.getTask_stared();
+            alreadyLiked.add(taskService.get(likeId));
+            user.setTask_stared(alreadyLiked);
+            Collection<Task> tasksSeen = user.getTask_seen();
+            Collection<Task> tasksSeenFiltered = new ArrayList<>();
+            for (Task t: tasksSeen) {
+                if (!t.getId().equals(likeId)) tasksSeenFiltered.add(t);
+            }
+
+            user.setTask_seen(tasksSeenFiltered);
+            userService.save(user);
+        }
+        return archivedIndex();
+    }
+
     @RequestMapping("/check_dislikes")
     public ModelAndView updateDislikes(HttpServletRequest request) {
         String disliked = request.getParameter("dislikedCard");
