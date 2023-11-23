@@ -2,6 +2,7 @@ package com.example.workswiper.Services;
 
 import com.example.workswiper.Domains.Task;
 import com.example.workswiper.Repos.TaskRepository;
+import com.example.workswiper.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,10 @@ public class TaskService {
 
     public List<Task> findAll(){
         return taskRepository.findAll();
+    }
+
+    public List<Task> findByUser_Id(User id){
+        return taskRepository.findByUser_Id(id);
     }
 
 }

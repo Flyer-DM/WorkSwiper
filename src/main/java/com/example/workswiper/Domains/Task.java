@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "task")
@@ -52,6 +53,11 @@ public class Task {
     @JoinTable(name = "task_tech", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tech_id", referencedColumnName = "id"))
     private Collection<Techstack> techstacks;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "task_stared", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private List<User> usersLiked;
 
     public Task() {
     }
@@ -130,6 +136,14 @@ public class Task {
 
     public void setTechstacks(Collection<Techstack> techstacks) {
         this.techstacks = techstacks;
+    }
+
+    public List<User> getUsersLiked() {
+        return usersLiked;
+    }
+
+    public void setUsersLiked(List<User> usersLiked) {
+        this.usersLiked = usersLiked;
     }
 
     @Override

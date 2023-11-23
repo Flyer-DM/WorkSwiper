@@ -24,7 +24,6 @@
         <div class="navbar-nav">
             <a class="nav-item nav-link" th:href="@{/new_task}">Создать задачу</a>
             <a class="nav-item nav-link" th:href="@{/my_tasks}">Мои задачи</a>
-            <a class="nav-item nav-link" th:href="@{/starred}">Отмеченные пользователи</a>
             <a class="btn btn-outline-danger my-2 my-sm-0" type="submit" href="/logout">Выйти</a>
         </div>
     </div>
@@ -34,6 +33,7 @@
     <div th:if="${not #lists.isEmpty(userFullDataList)}">
         <tr th:each="userdata : ${userFullDataList}" class="table-tr">
             <th scope="row" class="table-th" th:text="${userdata.user.id}"></th>
+            <th scope="row" class="table-th" th:text="${userdata.taskLiked.name}"></th>
             <th scope="row" class="table-th" th:text="${userdata.user.firstName}"></th>
             <th scope="row" class="table-th" th:text="${userdata.user.lastName}"></th>
             <th scope="row" class="table-th" th:text="${userdata.user.email}"></th>
@@ -64,6 +64,7 @@
     <ion-icon id="dislike" name="heart-dislike"></ion-icon>
     <div id="swiper">
         <p class="card-id"></p>
+        <p class="card-task"></p>
         <p class="card-firstname"></p>
         <p class="card-lastname"></p>
         <p class="card-email"></p>
@@ -89,6 +90,7 @@
                         onLike,
                         onDislike,
                         user_ID,
+                        task_Liked,
                         FirstName,
                         LastName,
                         Email,
@@ -103,6 +105,7 @@
             this.onLike = onLike;
             this.onDislike = onDislike;
             this.user_ID = user_ID;
+            this.task_Liked = task_Liked;
             this.FirstName = FirstName;
             this.LastName = LastName;
             this.Email = Email;
@@ -135,6 +138,11 @@
             textElementID.textContent = this.user_ID;
             textElementID.classList.add('card-id');
             card.append(textElementID);
+
+            const textElementTask = document.createElement('p');
+            textElementTask.textContent = this.task_Liked;
+            textElementTask.classList.add('card-task');
+            card.append(textElementTask);
 
             const textElement = document.createElement('p');
             textElement.textContent = this.FirstName;
@@ -299,6 +307,7 @@
     ];
 
     const user_ID = [];
+    const task_Liked = [];
     const names = [];
     const lastname = [];
     const email = [];
@@ -317,15 +326,16 @@
         const cells = rows[i].getElementsByTagName('th');
 
         user_ID.push(cells[0].textContent.trim());
-        names.push(cells[1].textContent.trim());
-        lastname.push(cells[2].textContent.trim());
-        email.push(cells[3].textContent);
-        telephone.push(cells[4].textContent.trim());
-        age.push(cells[5].textContent.trim());
-        country.push(cells[6].textContent.trim());
-        city.push(cells[7].textContent.trim());
-        education.push(cells[8].textContent.trim());
-        aboutme.push(cells[9].textContent.trim());
+        task_Liked.push(cells[1].textContent.trim());
+        names.push(cells[2].textContent.trim());
+        lastname.push(cells[3].textContent.trim());
+        email.push(cells[4].textContent);
+        telephone.push(cells[5].textContent.trim());
+        age.push(cells[6].textContent.trim());
+        country.push(cells[7].textContent.trim());
+        city.push(cells[8].textContent.trim());
+        education.push(cells[9].textContent.trim());
+        aboutme.push(cells[10].textContent.trim());
 
     }
 
@@ -358,6 +368,7 @@
     function appendNewCard() {
         const card = new Card({
             user_ID: user_ID[cardCount],
+            task_Liked: task_Liked[cardCount],
             FirstName: names[cardCount],
             LastName: lastname[cardCount],
             Email: email[cardCount],
@@ -379,7 +390,9 @@
                 like.classList.toggle('trigger');
 
                 const form = document.querySelector('form');
-                form.submit();
+                setTimeout(() => {
+                    form.submit();
+                }, 450);
             },
             onDislike: () => {
                 b++;
@@ -389,7 +402,9 @@
 
                 // Находим форму и вызываем метод submit
                 const form = document.querySelector('form');
-                form.submit();
+                setTimeout(() => {
+                    form.submit();
+                }, 450);
             }
         });
 

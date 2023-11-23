@@ -14,6 +14,8 @@ public class UserFullData {
 
     private String linkList;
 
+    private Task taskLiked;
+
     public UserFullData(User user) {
         this.user = user;
     }
@@ -48,5 +50,13 @@ public class UserFullData {
 
     public void setLinkList(String linkList) {
         this.linkList = linkList;
+    }
+
+    public Task getTaskLiked() {
+        return taskLiked;
+    }
+
+    public void setTaskLiked(Task taskLiked) {
+        this.taskLiked = taskLiked;
     }
 }

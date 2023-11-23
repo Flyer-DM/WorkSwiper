@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 @Controller
@@ -57,19 +56,19 @@ public class EmployerController {
     @RequestMapping("/employer")
     public ModelAndView index() {
         ModelAndView mav = new ModelAndView("employer");
-        List<User> listUsers = userService.getAll();
+        User me = funcs.getUserByEmail();
         List<UserFullData> userFullDataList = new ArrayList<>();
-        List<User> filteredListUsers = listUsers.stream()
-                .filter(u -> Objects.equals(u.getRoles().stream().findFirst().get().getName(), "ROLE_EMPLOYEE"))
-                .toList();
-        for (User user: filteredListUsers) {
-            UserFullData userFullData = new UserFullData(user);
-            userFullData.setPersonalData(personalDataService.findByUser_Id(user));
-            String links = String.join(" ", linkService.findByUser_Id(user).stream().map(Link::getLink).toList());
-            userFullData.setTechstackList(links);
-            String techs = String.join(" ", user.getTechstacks().stream().map(Techstack::getTechnology).toList());
-            userFullData.setTechstackList(techs);
-            userFullDataList.add(userFullData);
+        for (Task task: taskService.findByUser_Id(me)) {
+            for (User user: task.getUsersLiked()) {
+                UserFullData userFullData = new UserFullData(user);
+                userFullData.setTaskLiked(task);
+                userFullData.setPersonalData(personalDataService.findByUser_Id(user));
+                String links = String.join(" ", linkService.findByUser_Id(user).stream().map(Link::getLink).toList());
+                userFullData.setTechstackList(links);
+                String techs = String.join(" ", user.getTechstacks().stream().map(Techstack::getTechnology).toList());
+                userFullData.setTechstackList(techs);
+                userFullDataList.add(userFullData);
+            }
         }
         mav.addObject(userFullDataList);
         return mav;
@@ -87,7 +86,6 @@ public class EmployerController {
     public String saveTask(@RequestParam String name, @RequestParam String description,
                            @RequestParam String starttime, @RequestParam String endtime,
                            @RequestParam String result, HttpServletRequest request) throws ParseException {
-
         User user_id = funcs.getUserByEmail();
         Price price_id = new Price(new BigDecimal(request.getParameter("price")),
                                                   request.getParameter("currency"));
