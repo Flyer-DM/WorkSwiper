@@ -59,3 +59,8 @@ body {
     background: #145cd9;
     transform: scale(1.02);
 }
+
+.task-delete {
+    margin-left: 35%;
+    margin-top: 100%;
+}

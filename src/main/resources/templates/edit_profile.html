@@ -23,7 +23,7 @@
         </div>
         <div class="title-total">
             <div class="title">Work Swiper</div>
-            <form th:action="@{/save_profile}" method="post">
+            <form th:action="@{/save_profile}" method="post" enctype="multipart/form-data">
                 <section class="container">
                     <div class="profile-image">
                     </div>
@@ -47,6 +47,11 @@
                             <input type="text" class="education" name="education" placeholder="Образование:" maxlength="512"
                                    th:if="${personalData != null}" th:value="${personalData.education ?: ''}">
                         </label></h6>
+
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="image" name="image" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                            </div>
+
                         <div th:if="${not #lists.isEmpty(techstackList)}">
                             <label>
                                 <select name="techs" class="table-tr" id="techs" multiple>

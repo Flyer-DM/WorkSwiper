@@ -41,7 +41,7 @@ public class Task {
     @Column(name = "result", length = 512, nullable = false)
     private String result;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User user_id;
 

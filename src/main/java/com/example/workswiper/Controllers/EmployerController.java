@@ -82,6 +82,19 @@ public class EmployerController {
         return "new_task";
     }
 
+    @RequestMapping("/my_tasks")
+    public String myTasks(Model model) {
+        User me = funcs.getUserByEmail();
+        model.addAttribute("myTasks", taskService.findByUser_Id(me));
+        return "my_tasks";
+    }
+
+    @RequestMapping("/delete_task/{id}")
+    public String deleteTask(Model model, @PathVariable(name = "id") Long id) {
+        taskService.delete(id);
+        return myTasks(model);
+    }
+
     @RequestMapping(value = "/save_task")
     public String saveTask(@RequestParam String name, @RequestParam String description,
                            @RequestParam String starttime, @RequestParam String endtime,

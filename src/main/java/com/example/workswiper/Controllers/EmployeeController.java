@@ -10,9 +10,14 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.example.workswiper.User.UserServiceImpl;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -34,13 +39,16 @@ public class EmployeeController {
 
     final TaskService taskService;
 
+    final ImageService imageService;
+
     final Funcs funcs;
 
 
     @Autowired
     public EmployeeController(UserServiceImpl userService, PersonalDataService personalDataService,
                               LinkService linkService, UserRepository userRepository, TaskService taskService,
-                              FirstTimeService firstTimeService, TechStackService techStackService) {
+                              FirstTimeService firstTimeService, TechStackService techStackService,
+                              ImageService imageService) {
         super();
         this.userService = userService;
         this.personalDataService = personalDataService;
@@ -49,6 +57,7 @@ public class EmployeeController {
         this.firstTimeService = firstTimeService;
         this.techStackService = techStackService;
         this.taskService = taskService;
+        this.imageService = imageService;
         this.funcs = new Funcs(userRepository, techStackService);
     }
 
@@ -125,7 +134,7 @@ public class EmployeeController {
     }
 
     @RequestMapping("/save_profile")
-    public ModelAndView saveProfile(HttpServletRequest request) {
+    public ModelAndView saveProfile(HttpServletRequest request,@RequestParam("image") MultipartFile file) throws IOException, SQLException {
         User user = funcs.getUserByEmail();
         PersonalData personalData = personalDataService.findByUser_Id(user);
         String age = request.getParameter("age");
@@ -141,6 +150,10 @@ public class EmployeeController {
         String telephone = request.getParameter("telephone");
         if (telephone != null) personalData.setTelephone(telephone);
         personalDataService.save(personalData);
+        byte[] bytes = file.getBytes();
+        Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+        Image image = new Image(user, blob);
+        imageService.create(image);
         List<Techstack> techstacks = funcs.getTechsFromPage(request, "techs");
         user.setTechstacks(techstacks);
         userService.save(user);
@@ -156,7 +169,7 @@ public class EmployeeController {
                 linkService.save(new Link(linkText, link, user));
             }
         }
-        return myProfile();
+        return index();
     }
 
     @RequestMapping("/check_likes")
