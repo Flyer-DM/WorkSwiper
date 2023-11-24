@@ -64,7 +64,7 @@ body {
 
 .card-firstname{
     color: white;
-    font-size: 100px;
+    font-size: 70px;
     text-shadow: 4px 4px 4px #000;
 }
 
@@ -80,13 +80,13 @@ body {
 
 .card-lastname{
     color: white;
-    font-size: 80px;
+    font-size: 70px;
     text-shadow: 4px 4px 4px #000;
 }
 
 .card-email{
     color: white;
-    font-size: 80px;
+    font-size: 40px;
     text-shadow: 4px 4px 4px #000;
 }
 
@@ -96,15 +96,22 @@ body {
     text-shadow:  4px 4px 4px #000;
 }
 
+.card-task{
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    text-shadow: 4px 4px 4px #000;
+}
+
 .card-age, .card-country, .card-city, .card-aboutme{
     color: white;
-    font-size: 40px;
+    font-size: 20px;
     text-shadow: 4px 4px 4px #000;
 }
 
 .card-education{
     color: white;
-    font-size: 35px;
+    font-size: 20px;
     text-shadow: 4px 4px 4px #000;
 }
 

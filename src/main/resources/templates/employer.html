@@ -28,7 +28,7 @@
         </div>
     </div>
 </nav>
-<table id="1" class="table table-striped table-hover" style="display:none;">
+<table id="1" class="table table-striped table-hover" >
     <tbody>
     <div th:if="${not #lists.isEmpty(userFullDataList)}">
         <tr th:each="userdata : ${userFullDataList}" class="table-tr">
@@ -42,9 +42,9 @@
             <th scope="row" class="table-th" th:text="${userdata.personalData.country ?: ''}"></th>
             <th scope="row" class="table-th" th:text="${userdata.personalData.city ?: ''}"></th>
             <th scope="row" class="table-th" th:text="${userdata.personalData.education ?: ''}"></th>
-            <th scope="row" class="table-th" th:text="${userdata.personalData.aboutme ?: ''}"></th>
             <th scope="row" class="table-th" th:text="${userdata.linkList ?: ''}"></th>
             <th scope="row" class="table-th" th:text="${userdata.techstackList ?: ''}"></th>
+            <th scope="row" class="table-th" th:text="${userdata.personalData.aboutme ?: ''}"></th>
         </tr>
     </div>
     </tbody>
@@ -65,14 +65,18 @@
     <div id="swiper">
         <p class="card-id"></p>
         <p class="card-task"></p>
-        <p class="card-firstname"></p>
-        <p class="card-lastname"></p>
+        <div>
+            <p class="card-firstname"></p>
+            <p class="card-lastname"></p>
+        </div>
         <p class="card-email"></p>
         <p class="card-telephone"></p>
         <p class="card-age"></p>
         <p class="card-country"></p>
         <p class="card-city"></p>
         <p class="card-education"></p>
+        <p class="card-linklist"></p>
+        <p class="card-techstacklist"></p>
         <p class="card-aboutme"></p>
     </div>
     <ion-icon id="like" name="heart"></ion-icon>
@@ -99,6 +103,8 @@
                         Country,
                         City,
                         Education,
+                        LinkList,
+                        TechstackList,
                         AboutMe
                     }) {
             this.onDismiss = onDismiss;
@@ -114,6 +120,8 @@
             this.Country = Country;
             this.City = City;
             this.Education = Education;
+            this.LinkList = LinkList;
+            this.TechstackList = TechstackList;
             this.AboutMe = AboutMe;
 
             this.#init();
@@ -185,9 +193,19 @@
             card.append(textElement8);
 
             const textElement9 = document.createElement('p');
-            textElement9.textContent = this.AboutMe;
-            textElement9.classList.add('card-aboutme');
+            textElement9.textContent = this.LinkList;
+            textElement9.classList.add('card-linklist');
             card.append(textElement9);
+
+            const textElement10 = document.createElement('p');
+            textElement10.textContent = this.TechstackList;
+            textElement10.classList.add('card-techstacklist');
+            card.append(textElement10);
+
+            const textElement11 = document.createElement('p');
+            textElement11.textContent = this.AboutMe;
+            textElement11.classList.add('card-aboutme');
+            card.append(textElement11);
 
 
             this.element = card;
@@ -307,16 +325,18 @@
     ];
 
     const user_ID = [];
-    const task_Liked = [];
-    const names = [];
-    const lastname = [];
-    const email = [];
-    const telephone = [];
-    const age = [];
-    const country = [];
-    const city = [];
-    const education = [];
-    const aboutme = [];
+    const task_Liked = ["Вёрстка сайта java js"];
+    const names = ["Артём"];
+    const lastname = ["Петриков"];
+    const email = ["mail@mail.ru"];
+    const telephone = ["+7(977)231-23-23"];
+    const age = ["20"];
+    const country = ["Russia"];
+    const city = ["Moscow"];
+    const education = ["High"];
+    const linklist = [];
+    const techstacklist = [];
+    const aboutme = ["Im not good guy but very clever"];
 
     // Перебираем строки таблицы и добавляем данные в соответствующие списки
     const table = document.getElementById('1');
@@ -335,7 +355,9 @@
         country.push(cells[7].textContent.trim());
         city.push(cells[8].textContent.trim());
         education.push(cells[9].textContent.trim());
-        aboutme.push(cells[10].textContent.trim());
+        linklist.push(cells[10].textContent.trim());
+        techstacklist.push(cells[11].textContent.trim())
+        aboutme.push(cells[12].textContent.trim());
 
     }
 
@@ -372,12 +394,14 @@
             FirstName: names[cardCount],
             LastName: lastname[cardCount],
             Email: email[cardCount],
-            Telephone: telephone[cardCount],
-            Age: age[cardCount],
-            Country: country[cardCount],
-            City: city[cardCount],
-            Education: education[cardCount],
-            AboutMe: aboutme[cardCount],
+            Telephone: "Номер телефона: " + telephone[cardCount],
+            Age: "Возраст: " + age[cardCount],
+            Country: "Страна: " + country[cardCount],
+            City: "Город: " + city[cardCount],
+            Education: "Образование: " + education[cardCount],
+            LinkList: "Ссылки: " + linklist[cardCount],
+            TechstackList: "Технологии: " + techstacklist[cardCount],
+            AboutMe: "Обо мне: " + aboutme[cardCount],
 
             onDismiss: () => {
                 appendNewCard();
