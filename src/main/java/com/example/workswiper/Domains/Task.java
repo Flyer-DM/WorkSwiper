@@ -59,6 +59,16 @@ public class Task {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> usersLiked;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_liked", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private List<User> usersLikedFromEmployer;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_archived", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private List<User> usersArchivedFromEmployer;
+
     public Task() {
     }
 
@@ -144,6 +154,22 @@ public class Task {
 
     public void setUsersLiked(List<User> usersLiked) {
         this.usersLiked = usersLiked;
+    }
+
+    public List<User> getUsersLikedFromEmployer() {
+        return usersLikedFromEmployer;
+    }
+
+    public void setUsersLikedFromEmployer(List<User> usersLikedFromEmployer) {
+        this.usersLikedFromEmployer = usersLikedFromEmployer;
+    }
+
+    public List<User> getUsersArchivedFromEmployer() {
+        return usersArchivedFromEmployer;
+    }
+
+    public void setUsersArchivedFromEmployer(List<User> usersArchivedFromEmployer) {
+        this.usersArchivedFromEmployer = usersArchivedFromEmployer;
     }
 
     @Override

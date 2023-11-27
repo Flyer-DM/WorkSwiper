@@ -44,6 +44,11 @@
             <p class="task-amount" th:text="${task.price_id.amount}"></p>
             <p class="task-currency" th:text="${task.price_id.currency}"></p>
             <p class="task-delete">
+              <a th:href="@{'/edit_task/'+${task.id}}">
+                <button type="button" class="btn btn-light">
+                  Редактировать задачу
+                </button>
+              </a>
               <a th:href="@{'/delete_task/'+${task.id}}">
                 <button type="button" class="btn btn-danger">
                   Удалить задачу

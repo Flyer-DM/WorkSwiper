@@ -23,10 +23,12 @@
         <div class="title-total">
 
             <div class="title">Work Swiper</div>
-
-            <h2 class="first-name" th:text="${firstName}">Артём</h2>
-            <h2 class="second-name" th:text="${lastName}">Петриков</h2>
-            <h5 class="email" th:text="'Почта: ' + ${email}">mail@ru</h5>
+            <div>
+                <img height="100px" width="100px" th:src="@{${'/display?id=' + image.id}}" alt="Avatar">
+            </div>
+            <h2 class="first-name" th:text="${user.firstName}">Артём</h2>
+            <h2 class="second-name" th:text="${user.lastName}">Петриков</h2>
+            <h5 class="email" th:text="'Почта: ' + ${user.email}">mail@ru</h5>
             <h6 class="age" th:if="${personalData != null}" th:text="${personalData.age ?: ''}">20</h6>
             <h5 class="country" th:if="${personalData != null}" th:text="${personalData.country ?: ''}">Россия</h5>
             <h6 class="city" th:if="${personalData != null}" th:text="${personalData.city ?: ''}">Москва</h6>
@@ -41,8 +43,10 @@
                     <a class="text-black" th:text="${link.text}" th:href="${link.link}"></a>
                 </tr>
             </div>
-            <p class="desc" th:if="${personalData != null}" th:text="${personalData.aboutme ?: ''}">Учусь, Занимаюсь спортом, готов выполнить любую поставленную задачу в сроки! В личку не писать только звонить</p>
-            <h4 class="telephone" th:if="${personalData != null}" th:text="${personalData.telephone ?: ''}">+7(800)535-35-35</h4>
+            <p class="desc" th:if="${personalData != null}" th:text="${personalData.aboutme ?: ''}">Учусь, Занимаюсь
+                спортом, готов выполнить любую поставленную задачу в сроки! В личку не писать только звонить</p>
+            <h4 class="telephone" th:if="${personalData != null}" th:text="${personalData.telephone ?: ''}">
+                +7(800)535-35-35</h4>
             <br>
             <div class="box-3">
                 <form th:action="@{/edit_profile}" method="post">
@@ -54,7 +58,6 @@
         </div>
 
     </div>
-
 
 
 </div>
