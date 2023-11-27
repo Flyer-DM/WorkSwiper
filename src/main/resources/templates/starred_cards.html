@@ -40,12 +40,14 @@
                     <div class="card">
                         <p class="task-author" th:text="${task.user_id.lastName} + ' ' + ${task.user_id.firstName}"></p>
                         <p class="task-name" th:text="${task.name}"></p>
-                        <p class="task-description" th:text="${task.description}"></p>
-                        <p class="task-starttime" th:text="${task.starttime}"></p>
-                        <p class="task-endtime" th:text="${task.endtime}"></p>
-                        <p class="task-result" th:text="${task.result}"></p>
-                        <p class="task-amount" th:text="${task.price_id.amount}"></p>
-                        <p class="task-currency" th:text="${task.price_id.currency}"></p>
+                        <p class="task-description" th:text="'Описание: ' + ${task.description}"></p>
+                        <p class="task-starttime" th:text="'С: ' + ${task.starttime}"></p>
+                        <p class="task-endtime" th:text="'До: ' + ${task.endtime}"></p>
+                        <p class="task-result" th:text="'Результат: ' + ${task.result}"></p>
+                        <div class="task-info">
+                            <p class="task-amount" th:text="'Стоимость: ' + ${task.price_id.amount}"></p>
+                            <p class="task-currency" th:text="${task.price_id.currency}"></p>
+                        </div>
                     </div>
                 </div>
             </div>

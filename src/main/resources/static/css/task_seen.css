@@ -64,3 +64,38 @@ body {
     margin-left: 35%;
     margin-top: 100%;
 }
+
+.task-name, .task-description, .task-result, .task-currency {
+    color: white;
+    font-size: 50px;
+    text-shadow: 4px 4px 4px #000;
+}
+
+.task-name {
+    color: white;
+    font-size: 60px;
+    text-align: center;
+    text-shadow: 4px 4px 4px #000;
+}
+
+.task-author{
+    color: white;
+    font-size: 60px;
+    text-align: center;
+    text-shadow: 4px 4px 4px #000;
+}
+
+.task-starttime, .task-endtime{
+    color: white;
+    font-size: 30px;
+    text-shadow: 4px 4px 4px #000;
+}
+.task-info {
+    display: flex;
+}
+.task-amount, .task-currency {
+    color: white;
+    margin-right: 10px;
+    font-size: 30px;
+    text-shadow: 4px 4px 4px #000;
+}
