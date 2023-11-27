@@ -8,7 +8,10 @@ import com.example.workswiper.User.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,18 +64,25 @@ public class EmployeeController {
         this.funcs = new Funcs(userRepository, techStackService);
     }
 
+    @GetMapping("/display")
+    public ResponseEntity<byte[]> displayImage(@RequestParam("id") long id) throws SQLException
+    {
+        Image image = imageService.viewById(id);
+        byte [] imageBytes = null;
+        imageBytes = image.getImage().getBytes(1,(int) image.getImage().length());
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+    }
+
     @RequestMapping("edit_profile")
     public ModelAndView editProfile() {
         ModelAndView mav = new ModelAndView("edit_profile");
         User user = funcs.getUserByEmail();
-        List<Techstack> techstackList = techStackService.findAll();
-        PersonalData personalData = personalDataService.findByUser_Id(user);
         List<Link> linkList = linkService.findByUser_Id(user);
         List<String> strLinks = linkList.stream().map(Link::getLink).toList();
         String links = String.join(" ", strLinks);
         mav.addObject(user);
-        mav.addObject(techstackList);
-        mav.addObject(personalData);
+        mav.addObject("techstackList", techStackService.findAll());
+        mav.addObject("personalData", personalDataService.findByUser_Id(user));
         mav.addObject("links", links);
         return mav;
     }
@@ -121,15 +131,11 @@ public class EmployeeController {
     public ModelAndView myProfile() {
         ModelAndView mav = new ModelAndView("profile");
         User user = funcs.getUserByEmail();
-        PersonalData personalData = personalDataService.findByUser_Id(user);
-        List<Link> linkList = linkService.findByUser_Id(user);
-        Collection<Techstack> techStackList = user.getTechstacks();
-        mav.addObject("firstName", user.getFirstName());
-        mav.addObject("lastName", user.getLastName());
-        mav.addObject("email", user.getEmail());
-        mav.addObject(personalData);
-        mav.addObject(linkList);
-        mav.addObject("techStackList", techStackList);
+        mav.addObject(user);
+        mav.addObject("image", imageService.findByUser_Id(user));
+        mav.addObject("personalData", personalDataService.findByUser_Id(user));
+        mav.addObject("linkList", linkService.findByUser_Id(user));
+        mav.addObject("techStackList", user.getTechstacks());
         return mav;
     }
 

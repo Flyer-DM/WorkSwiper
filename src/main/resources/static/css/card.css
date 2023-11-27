@@ -50,16 +50,10 @@ body {
 
 .card-id {
     display: none;
-    color: white;
-    font-size: 50px;
-    text-shadow: 4px 4px 4px #000;
 }
 
 .task-id {
     display: none;
-    color: white;
-    font-size: 50px;
-    text-shadow: 4px 4px 4px #000;
 }
 
 .card-firstname{

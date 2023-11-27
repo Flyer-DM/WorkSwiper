@@ -34,6 +34,7 @@
     <div th:if="${not #lists.isEmpty(userFullDataList)}">
         <tr th:each="userdata : ${userFullDataList}" class="table-tr">
             <th scope="row" class="table-th" th:text="${userdata.user.id}"></th>
+            <th scope="row" class="table-th" th:text="${userdata.taskLiked.id}"></th>
             <th scope="row" class="table-th" th:text="${userdata.taskLiked.name}"></th>
             <th scope="row" class="table-th" th:text="${userdata.user.firstName}"></th>
             <th scope="row" class="table-th" th:text="${userdata.user.lastName}"></th>
@@ -81,6 +82,7 @@
     <ion-icon id="dislike" name="heart-dislike"></ion-icon>
     <div id="swiper">
         <p class="card-id"></p>
+        <p class="task-id"></p>
         <p class="card-task"></p>
         <div>
             <p class="card-firstname"></p>
@@ -111,6 +113,7 @@
                         onLike,
                         onDislike,
                         user_ID,
+                        task_ID,
                         task_Liked,
                         FirstName,
                         LastName,
@@ -128,6 +131,7 @@
             this.onLike = onLike;
             this.onDislike = onDislike;
             this.user_ID = user_ID;
+            this.task_ID = task_ID;
             this.task_Liked = task_Liked;
             this.FirstName = FirstName;
             this.LastName = LastName;
@@ -163,6 +167,11 @@
             textElementID.textContent = this.user_ID;
             textElementID.classList.add('card-id');
             card.append(textElementID);
+
+            const textElementTaskId = document.createElement('p');
+            textElementTaskId.textContent = this.task_ID;
+            textElementTaskId.classList.add('task-id');
+            card.append(textElementTaskId);
 
             const textElementTask = document.createElement('p');
             textElementTask.textContent = this.task_Liked;
@@ -342,6 +351,7 @@
     ];
 
     const user_ID = [];
+    const task_ID = [];
     const task_Liked = [];
     const names = [];
     const lastname = [];
@@ -363,18 +373,19 @@
         const cells = rows[i].getElementsByTagName('th');
 
         user_ID.push(cells[0].textContent.trim());
-        task_Liked.push(cells[1].textContent.trim());
-        names.push(cells[2].textContent.trim());
-        lastname.push(cells[3].textContent.trim());
-        email.push(cells[4].textContent);
-        telephone.push(cells[5].textContent.trim());
-        age.push(cells[6].textContent.trim());
-        country.push(cells[7].textContent.trim());
-        city.push(cells[8].textContent.trim());
-        education.push(cells[9].textContent.trim());
-        linklist.push(cells[10].textContent.trim());
-        techstacklist.push(cells[11].textContent.trim())
-        aboutme.push(cells[12].textContent.trim());
+        task_ID.push(cells[1].textContent.trim());
+        task_Liked.push(cells[2].textContent.trim());
+        names.push(cells[3].textContent.trim());
+        lastname.push(cells[4].textContent.trim());
+        email.push(cells[5].textContent);
+        telephone.push(cells[6].textContent.trim());
+        age.push(cells[7].textContent.trim());
+        country.push(cells[8].textContent.trim());
+        city.push(cells[9].textContent.trim());
+        education.push(cells[10].textContent.trim());
+        linklist.push(cells[11].textContent.trim());
+        techstacklist.push(cells[12].textContent.trim())
+        aboutme.push(cells[13].textContent.trim());
 
     }
 
@@ -396,8 +407,20 @@
         likedCardElement.textContent = `${likedCards}`;
     }
 
+    function updateTaskLiked(cardTaskID) {
+        likedCards.push(cardTaskID[b]);
+        const likedCardElement = document.getElementById('likedCard');
+        likedCardElement.textContent = `${likedCards}`;
+    }
+
     function updateCardDisliked(cardUserID) {
         dislikedCards.push(cardUserID[b]);
+        const dislikedCardElement = document.getElementById('dislikedCard');
+        dislikedCardElement.textContent = `${dislikedCards}`;
+    }
+
+    function updateTaskDisliked(cardTaskID) {
+        dislikedCards.push(cardTaskID[b]);
         const dislikedCardElement = document.getElementById('dislikedCard');
         dislikedCardElement.textContent = `${dislikedCards}`;
     }
@@ -407,6 +430,7 @@
     function appendNewCard() {
         const card = new Card({
             user_ID: user_ID[cardCount],
+            task_ID: task_ID[cardCount],
             task_Liked: task_Liked[cardCount],
             FirstName: names[cardCount],
             LastName: lastname[cardCount],
@@ -427,22 +451,23 @@
             onLike: () => {
                 b++;
                 updateCardLiked(user_ID);
+                updateTaskLiked(task_ID);
                 like.style.animationPlayState = 'running';
                 like.classList.toggle('trigger');
 
-                const form = document.querySelector('form');
+                const form = document.getElementById('form-like');
                 setTimeout(() => {
                     form.submit();
                 }, 450);
             },
             onDislike: () => {
                 b++;
-                updateCardDisliked(user_ID)
+                updateCardDisliked(user_ID);
+                updateTaskDisliked(task_ID);
                 dislike.style.animationPlayState = 'running';
                 dislike.classList.toggle('trigger');
 
-                // Находим форму и вызываем метод submit
-                const form = document.querySelector('form');
+                const form = document.getElementById('form-dislike');
                 setTimeout(() => {
                     form.submit();
                 }, 450);
