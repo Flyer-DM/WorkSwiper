@@ -64,13 +64,14 @@ public class EmployerController {
                 userFullData.setTaskLiked(task);
                 userFullData.setPersonalData(personalDataService.findByUser_Id(user));
                 String links = String.join(" ", linkService.findByUser_Id(user).stream().map(Link::getLink).toList());
-                userFullData.setTechstackList(links);
+                userFullData.setLinkList(links);
                 String techs = String.join(" ", user.getTechstacks().stream().map(Techstack::getTechnology).toList());
                 userFullData.setTechstackList(techs);
                 userFullDataList.add(userFullData);
             }
         }
         mav.addObject(userFullDataList);
+        mav.addObject("username", me.getLastName() + " " + me.getFirstName());
         return mav;
     }
 
