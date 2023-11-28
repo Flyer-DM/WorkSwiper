@@ -50,8 +50,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
     private Collection<Task> task_stared;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    private Collection<Task> myTasks;
 
     public Collection<Task> getTask_seen() {
         return task_seen;
@@ -68,15 +66,6 @@ public class User {
     public void setTask_stared(Collection<Task> task_stared) {
         this.task_stared = task_stared;
     }
-
-    public Collection<Task> getMyTasks() {
-        return myTasks;
-    }
-
-    public void setMyTasks(Collection<Task> myTasks) {
-        this.myTasks = myTasks;
-    }
-
     public User() {
     }
 

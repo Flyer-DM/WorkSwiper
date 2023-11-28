@@ -1,4 +1,5 @@
 .mult-select-tag {
+    margin-left: 17px;
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -56,7 +57,7 @@
 
 .mult-select-tag button {
     cursor: pointer;
-    width: 100%;
+    width: 50%;
     color: #718096;
     outline: 0;
     height: 100%;
