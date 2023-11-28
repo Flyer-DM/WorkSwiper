@@ -52,7 +52,7 @@ public class EmployerController {
         this.firstTimeService = firstTimeService;
         this.techStackService = techStackService;
         this.taskService = taskService;
-        this.funcs = new Funcs(userRepository, techStackService);
+        this.funcs = new Funcs(userRepository, techStackService, taskService, personalDataService, linkService);
     }
 
     @RequestMapping("/employer")
@@ -65,14 +65,7 @@ public class EmployerController {
                     task.getUsersArchivedFromEmployer().stream()).toList();
             List<User> usersToShow = task.getUsersLiked().stream().filter(f -> !allUsers.contains(f)).toList();
             for (User user : usersToShow) {
-                UserFullData userFullData = new UserFullData(user);
-                userFullData.setTaskLiked(task);
-                userFullData.setPersonalData(personalDataService.findByUser_Id(user));
-                String links = String.join(" ", linkService.findByUser_Id(user).stream().map(Link::getLink).toList());
-                userFullData.setLinkList(links);
-                String techs = String.join(" ", user.getTechstacks().stream().map(Techstack::getTechnology).toList());
-                userFullData.setTechstackList(techs);
-                userFullDataList.add(userFullData);
+                userFullDataList.add(funcs.getUserFullData(task, user));
             }
         }
         mav.addObject(userFullDataList);
@@ -90,9 +83,20 @@ public class EmployerController {
 
     @RequestMapping("/my_tasks")
     public String myTasks(Model model) {
-        User me = funcs.getUserByEmail();
-        model.addAttribute("myTasks", taskService.findByUser_Id(me));
+        model.addAttribute("myTasks", taskService.findByUser_Id(funcs.getUserByEmail()));
         return "my_tasks";
+    }
+
+    @RequestMapping("/users_for_task/{id}")
+    public String usersForTask(Model model, @PathVariable(name = "id") Long id) {
+        Task task = taskService.get(id);
+        model.addAttribute(task);
+        List<UserFullData> userFullDataList = new ArrayList<>();
+        for (User user : task.getUsersLikedFromEmployer()) {
+            userFullDataList.add(funcs.getUserFullData(task, user));
+        }
+        model.addAttribute("users", userFullDataList);
+        return "my_users";
     }
 
     @RequestMapping("/delete_task/{id}")
@@ -118,7 +122,6 @@ public class EmployerController {
     @RequestMapping("/check_liked_user")
     public ModelAndView updateLikes(HttpServletRequest request) {
         List<String> liked = new ArrayList<>(Arrays.asList(request.getParameter("likedCard").split(",")));
-        System.out.println(liked);
         if (!liked.isEmpty()) {
             Task task = taskService.get(Long.valueOf(liked.get(1)));
             List<User> users = task.getUsersLikedFromEmployer();
@@ -132,7 +135,6 @@ public class EmployerController {
     @RequestMapping("/check_disliked_user")
     public ModelAndView updateDislikes(HttpServletRequest request) {
         List<String> disliked = new ArrayList<>(Arrays.asList(request.getParameter("dislikedCard").split(",")));
-        System.out.println(disliked);
         if (!disliked.isEmpty()) {
             Task task = taskService.get(Long.valueOf(disliked.get(1)));
             List<User> users = task.getUsersArchivedFromEmployer();

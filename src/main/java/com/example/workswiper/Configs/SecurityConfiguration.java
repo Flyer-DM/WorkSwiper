@@ -42,8 +42,8 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/registration**", "/login", "/").permitAll()
-                        .requestMatchers("/employer", "/new_task").hasRole("EMPLOYER")
-                        .requestMatchers("/employee", "/starred_cards", "/profile", "edit_profile").hasRole("EMPLOYEE")
+                        .requestMatchers("/employer", "/new_task", "/my_tasks/*", "/my_users/*").hasRole("EMPLOYER")
+                        .requestMatchers("/employee", "/starred_cards", "/profile", "/edit_profile").hasRole("EMPLOYEE")
                         .requestMatchers("/user").access(new WebExpressionAuthorizationManager("hasRole('EMPLOYER') or hasRole('EMPLOYEE')"))
                         .anyRequest().authenticated()
 

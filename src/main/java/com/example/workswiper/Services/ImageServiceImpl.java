@@ -17,6 +17,10 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.save(image);
     }
     @Override
+    public void save(Image image){
+        imageRepository.save(image);
+    }
+    @Override
     public List<Image> viewAll() {
         return (List<Image>) imageRepository.findAll();
     }

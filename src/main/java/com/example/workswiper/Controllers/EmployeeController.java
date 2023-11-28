@@ -61,15 +61,14 @@ public class EmployeeController {
         this.techStackService = techStackService;
         this.taskService = taskService;
         this.imageService = imageService;
-        this.funcs = new Funcs(userRepository, techStackService);
+        this.funcs = new Funcs(userRepository, techStackService, taskService, personalDataService, linkService);
     }
 
     @GetMapping("/display")
-    public ResponseEntity<byte[]> displayImage(@RequestParam("id") long id) throws SQLException
-    {
+    public ResponseEntity<byte[]> displayImage(@RequestParam("id") long id) throws SQLException {
         Image image = imageService.viewById(id);
-        byte [] imageBytes = null;
-        imageBytes = image.getImage().getBytes(1,(int) image.getImage().length());
+        byte[] imageBytes = null;
+        imageBytes = image.getImage().getBytes(1, (int) image.getImage().length());
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
@@ -81,6 +80,7 @@ public class EmployeeController {
         List<String> strLinks = linkList.stream().map(Link::getLink).toList();
         String links = String.join(" ", strLinks);
         mav.addObject(user);
+        mav.addObject("image", imageService.findByUser_Id(user));
         mav.addObject("techstackList", techStackService.findAll());
         mav.addObject("personalData", personalDataService.findByUser_Id(user));
         mav.addObject("links", links);
@@ -140,11 +140,11 @@ public class EmployeeController {
     }
 
     @RequestMapping("/save_profile")
-    public ModelAndView saveProfile(HttpServletRequest request,@RequestParam("image") MultipartFile file) throws IOException, SQLException {
+    public ModelAndView saveProfile(HttpServletRequest request, @RequestParam("image") MultipartFile file) throws IOException, SQLException {
         User user = funcs.getUserByEmail();
         PersonalData personalData = personalDataService.findByUser_Id(user);
         String age = request.getParameter("age");
-        if (age != null) personalData.setAge(Long.valueOf(age));
+        if (!age.isEmpty()) personalData.setAge(Long.valueOf(age));
         String country = request.getParameter("country");
         if (country != null) personalData.setCountry(country);
         String city = request.getParameter("city");
@@ -158,8 +158,14 @@ public class EmployeeController {
         personalDataService.save(personalData);
         byte[] bytes = file.getBytes();
         Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-        Image image = new Image(user, blob);
-        imageService.create(image);
+        Image image = imageService.findByUser_Id(user);
+        if (image == null) imageService.create(new Image(user, blob));
+        else {
+            if (blob.length() != 0) {
+                image.setImage(blob);
+                imageService.save(image);
+            }
+        }
         List<Techstack> techstacks = funcs.getTechsFromPage(request, "techs");
         user.setTechstacks(techstacks);
         userService.save(user);
@@ -202,7 +208,7 @@ public class EmployeeController {
             user.setTask_stared(alreadyLiked);
             Collection<Task> tasksSeen = user.getTask_seen();
             Collection<Task> tasksSeenFiltered = new ArrayList<>();
-            for (Task t: tasksSeen) {
+            for (Task t : tasksSeen) {
                 if (!t.getId().equals(likeId)) tasksSeenFiltered.add(t);
             }
 
