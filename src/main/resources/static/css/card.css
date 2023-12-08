@@ -11,6 +11,10 @@ body {
     background-size: cover;
 }
 
+ul {
+    list-style-type: none;
+}
+
 .card-all-cards {
     display: flex;
     justify-content: space-evenly;
@@ -56,13 +60,13 @@ body {
     display: none;
 }
 
-.card-firstname{
+.card-firstname {
     color: white;
-    font-size: 70px;
+    font-size: 30px;
     text-shadow: 4px 4px 4px #000;
 }
 
-.task-author{
+.task-author {
     color: white;
     font-family: Inter;
     text-align: left;
@@ -72,43 +76,74 @@ body {
     background: rgba(0, 0, 0, 0);
 }
 
-.card-lastname{
+.card-lastname {
     color: white;
-    font-size: 70px;
+    font-size: 50px;
     text-shadow: 4px 4px 4px #000;
 }
 
-.card-email{
+.card-email {
     color: white;
-    font-size: 40px;
+    font-size: 30px;
     text-shadow: 4px 4px 4px #000;
 }
 
-.card-telephone{
+.card-telephone {
     color: white;
-    font-size: 35px;
-    text-shadow:  4px 4px 4px #000;
+    font-size: 30px;
+    text-shadow: 4px 4px 4px #000;
 }
 
-.card-task{
+.card-task {
     color: white;
     text-align: center;
     font-size: 50px;
     text-shadow: 4px 4px 4px #000;
 }
 
-.card-age, .card-country, .card-city, .card-aboutme{
+.card-age, .card-country, .card-city {
     color: white;
     font-size: 20px;
     text-shadow: 4px 4px 4px #000;
 }
 
-.card-education{
+.card-aboutme {
+    color: white;
+    text-shadow: 4px 4px 4px #000;
+    background: #4083f5;
+    min-width: 100%;
+    border: none;
+    resize: none;
+    cursor: default;
+    height: 200px;
+}
+
+.card-aboutme:hover {
+    background: #145cd9;
+}
+
+.card-education {
     color: white;
     font-size: 20px;
     text-shadow: 4px 4px 4px #000;
 }
 
+.no-users-feedback {
+    color: white;
+    font-size: 60px;
+    text-shadow: 4px 4px 4px #000;
+    position: absolute;
+    top: 40%;
+    left: 20%;
+}
+
+.mylinks {
+    color: white;
+    overflow: hidden;
+    font-size: 20px;
+    text-shadow: 4px 4px 4px #000;
+    background-clip: text;
+}
 
 #like,
 #dislike {

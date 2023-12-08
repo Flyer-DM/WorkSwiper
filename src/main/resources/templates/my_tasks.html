@@ -36,14 +36,19 @@
             <div th:each="task : ${myTasks}">
                 <div class="swiper">
                     <div class="card">
-                        <p class="task-name" th:text="${task.name}"></p>
-                        <p class="task-description" th:text="${task.description}"></p>
-                        <p class="task-starttime" th:text="${task.starttime}"></p>
-                        <p class="task-endtime" th:text="${task.endtime}"></p>
-                        <p class="task-result" th:text="${task.result}"></p>
-                        <p class="task-amount" th:text="${task.price_id.amount}"></p>
-                        <p class="task-currency" th:text="${task.price_id.currency}"></p>
-                        <p class="task-delete">
+                        <p class="task-name" th:text="${task.name}">название задачи</p>
+                        <label>
+                            <textarea class="task-description" th:text="${task.description}" readonly="readonly">описание</textarea>
+                        </label>
+                        <p class="task-starttime" th:text="${task.starttime}">начало срока</p>
+                        <p class="task-endtime" th:text="${task.endtime}">конец срока</p>
+                        <label>
+                            <textarea class="task-result" th:text="${task.result}"
+                                      readonly="readonly">результат задачи</textarea>
+                        </label>
+                        <p class="task-amount" th:text="${task.price_id.amount} + ' ' + ${task.price_id.currency}">
+                            валюта</p>
+                        <div class="btn-for-users">
                             <a th:href="@{'/users_for_task/'+${task.id}}">
                                 <button type="button" class="btn btn-light">
                                     Откликнувшиеся пользователи
@@ -59,7 +64,7 @@
                                     Удалить задачу
                                 </button>
                             </a>
-                        </p>
+                        </div>
                     </div>
                 </div>
             </div>

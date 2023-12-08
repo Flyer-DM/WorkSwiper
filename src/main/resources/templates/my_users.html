@@ -13,7 +13,9 @@
 </head>
 
 <body>
-
+<div th:if="${#lists.isEmpty(users)}" class="no-users-feedback">
+    Нет откликнувшихся пользователей
+</div>
 <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" th:href="@{/employer}"
        style="font-family: impact, serif; color: black; font-size: 30px; margin-left: 4px">WorkSwiper</a>
@@ -35,24 +37,39 @@
         <div class="flex-container">
             <div th:each="userdata : ${users}">
                 <div class="swiper">
-                    <div class="card">
+                    <div class="card" style="cursor: default">
                         <div>
-                            <p class="card-firstname" th:text="${userdata.user.firstName}"></p>
-                            <p class="card-lastname" th:text="${userdata.user.lastName}"></p>
+                            <p class="card-firstname"
+                               th:text="${userdata.user.firstName + ' ' +  userdata.user.lastName + ', ' + userdata.personalData.age}">
+                                Имя Фамилия, возраст</p>
                         </div>
-                        <p class="card-email" th:text="${userdata.user.email}"></p>
-                        <p class="card-telephone" th:text="${userdata.personalData.telephone}"></p>
-                        <p class="card-age" th:text="${userdata.personalData.age}"></p>
-                        <p class="card-country" th:text="${userdata.personalData.country}"></p>
-                        <p class="card-city" th:text="${userdata.personalData.city}"></p>
-                        <p class="card-education" th:text="${userdata.personalData.education}"></p>
-                        <p class="card-linklist" th:text="${userdata.linkList}"></p>
-                        <p class="card-techstacklist" th:text="${userdata.techstackList}"></p>
-                        <p class="card-aboutme" th:text="${userdata.personalData.aboutme}"></p>
+                        <p class="card-email" th:text="${userdata.user.email}">почта</p>
+                        <p class="card-telephone" th:text="${userdata.personalData.telephone}">телефон</p>
+                        <p class="card-country"
+                           th:text="${userdata.personalData.country + ', ' + userdata.personalData.city}">страна,
+                            город</p>
+                        <p class="card-education" th:text="${userdata.personalData.education}">образование</p>
+                        <p class="card-linklist" id="links" th:text="${userdata.linkList}"></p>
+                        <p class="card-techstacklist" th:text="${userdata.techstackList}">технологии</p>
+                        <label>
+                            <textarea class="card-aboutme" th:text="${userdata.personalData.aboutme}"
+                                      readonly="readonly">о пользователе</textarea>
+                        </label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    let linkList = document.getElementById("links").innerHTML;
+    linkList = linkList.split(' ');
+    const ul = document.createElement('ul');
+    for (let j = 0; j < linkList.length; j++) {
+        let li = document.createElement('li');
+        li.innerHTML = '<a class="mylinks" href="' + linkList[j] + '">' + linkList[j].substring(linkList[j].indexOf("//") + 2, linkList[j].indexOf("/", 8)) + '</a>';
+        ul.appendChild(li);
+    }
+    document.getElementById("links").parentNode.replaceChild(ul, document.getElementById("links"));
+</script>
 </body>

@@ -55,47 +55,76 @@ body {
     transition: transform 0.45s ease, background 0.9s ease;
 }
 
-.card:hover {
+.card:hover, .task-description:hover, .task-result:hover {
     background: #145cd9;
-    transform: scale(1.02);
 }
 
-.task-delete {
-    margin-left: 35%;
-    margin-top: 100%;
-}
-
-.task-name, .task-description, .task-result, .task-currency {
+.task-name {
     color: white;
     font-size: 50px;
     text-shadow: 4px 4px 4px #000;
 }
 
+.task-description, .task-result {
+    color: white;
+    text-shadow: 4px 4px 4px #000;
+    background: #4083f5;
+    min-width: 100%;
+    border: none;
+    resize: none;
+    cursor: default;
+}
+
+.task-description {
+    height: 200px;
+}
+
+.task-result {
+    height: 100px;
+}
+
+.task-currency {
+    display: inline;
+}
+
 .task-name {
     color: white;
-    font-size: 60px;
+    font-size: 40px;
     text-align: center;
     text-shadow: 4px 4px 4px #000;
 }
 
-.task-author{
+.task-author {
     color: white;
     font-size: 60px;
     text-align: center;
     text-shadow: 4px 4px 4px #000;
 }
 
-.task-starttime, .task-endtime{
+.task-starttime, .task-endtime {
     color: white;
     font-size: 30px;
     text-shadow: 4px 4px 4px #000;
 }
+
 .task-info {
     display: flex;
 }
+
 .task-amount, .task-currency {
     color: white;
     margin-right: 10px;
     font-size: 30px;
     text-shadow: 4px 4px 4px #000;
+}
+
+.btn-for-users {
+    height: 130px;
+    margin-top: auto;
+}
+
+.btn-for-users > a > button {
+    height: 55px;
+    width: 150px;
+    margin-left: 0.7%;
 }
