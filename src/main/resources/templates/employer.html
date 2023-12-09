@@ -17,7 +17,8 @@
     Нет откликнувшихся пользователей
 </div>
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-    <a class="navbar-brand" th:href="@{/employer}" style="font-family: impact, serif; color: black; font-size: 30px; margin-left: 4px">WorkSwiper</a>
+    <a class="navbar-brand" th:href="@{/employer}"
+       style="font-family: impact, serif; color: black; font-size: 30px; margin-left: 4px">WorkSwiper</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -46,7 +47,7 @@
             <th scope="row" class="table-th" th:text="${userdata.personalData.country ?: ''}"></th>
             <th scope="row" class="table-th" th:text="${userdata.personalData.city ?: ''}"></th>
             <th scope="row" class="table-th" th:text="${userdata.personalData.education ?: ''}"></th>
-            <th scope="row" class="table-th" id="links" th:text="${userdata.linkList ?: ''}"></th>
+            <th scope="row" class="table-th" th:text="${userdata.linkList ?: ''}"></th>
             <th scope="row" class="table-th" th:text="${userdata.techstackList ?: ''}"></th>
             <th scope="row" class="table-th" th:text="${userdata.personalData.aboutme ?: ''}"></th>
         </tr>
@@ -55,7 +56,6 @@
 </table>
 
 <div>
-
     <div id="cardCount" style="display: none"></div>
     <!--    <div th:if="${!hide}">-->
     <div>
@@ -80,7 +80,7 @@
     </div>
 </div>
 
-<div class="card-all-cards" th:if="${not #lists.isEmpty(userFullDataList)}">
+<div class="card-all-cards">
 
     <ion-icon id="dislike" name="heart-dislike"></ion-icon>
     <div id="swiper">
@@ -103,21 +103,13 @@
     </div>
     <ion-icon id="like" name="heart"></ion-icon>
 </div>
+</div>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 <br>
 </body>
 
 <script lang="JavaScript">
-    let linkList = document.getElementById("links").innerHTML;
-    linkList = linkList.split(' ');
-    const ul = document.createElement('ul');
-    for (let j = 0; j < linkList.length; j++) {
-        let li = document.createElement('li');
-        li.innerHTML = '<a href="' + linkList[j] + '">' + linkList[j].substring(linkList[j].indexOf("//") + 2, linkList[j].indexOf("/", 8)) + '</a>';
-        ul.appendChild(li);
-    }
-    document.getElementById("links").parentNode.replaceChild(ul, document.getElementById("links"));
     class Card {
         constructor({
                         onDismiss,
@@ -502,6 +494,7 @@
         appendNewCard();
     }
 
+    document.getElementsByClassName("card-aboutme")[0].remove();
 
 </script>
 

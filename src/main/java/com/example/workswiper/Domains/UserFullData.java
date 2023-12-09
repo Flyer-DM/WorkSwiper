@@ -12,7 +12,7 @@ public class UserFullData {
 
     private String techstackList;
 
-    private String linkList;
+    private List<Link> linkList;
 
     private Task taskLiked;
 
@@ -44,11 +44,11 @@ public class UserFullData {
         this.techstackList = techstackList;
     }
 
-    public String getLinkList() {
+    public List<Link> getLinkList() {
         return linkList;
     }
 
-    public void setLinkList(String linkList) {
+    public void setLinkList(List<Link> linkList) {
         this.linkList = linkList;
     }
 
@@ -58,5 +58,12 @@ public class UserFullData {
 
     public void setTaskLiked(Task taskLiked) {
         this.taskLiked = taskLiked;
+    }
+
+    @Override
+    public String toString() {
+        return "UserFullData{" +
+                "user=" + user +
+                '}';
     }
 }

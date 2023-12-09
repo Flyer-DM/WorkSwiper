@@ -44,32 +44,39 @@
                                 Имя Фамилия, возраст</p>
                         </div>
                         <p class="card-email" th:text="${userdata.user.email}">почта</p>
-                        <p class="card-telephone" th:text="${userdata.personalData.telephone}">телефон</p>
+                        <p class="card-telephone" th:if="${userdata.personalData.telephone != null}"
+                           th:text="${userdata.personalData.telephone}">телефон</p>
                         <p class="card-country"
                            th:text="${userdata.personalData.country + ', ' + userdata.personalData.city}">страна,
                             город</p>
-                        <p class="card-education" th:text="${userdata.personalData.education}">образование</p>
-                        <p class="card-linklist" id="links" th:text="${userdata.linkList}"></p>
+                        <p class="card-education" th:if="${userdata.personalData.education != null}"
+                           th:text="${userdata.personalData.education}">образование</p>
+                        <p class="card-linklist" th:if="${not #lists.isEmpty(userdata.linkList)}">
+                        <ul th:each="link : ${userdata.linkList}">
+                            <li>
+                                <a class="mylinks" th:text="${link.text}" th:href="${link.link}"></a>
+                            </li>
+                        </ul>
+                        </p>
                         <p class="card-techstacklist" th:text="${userdata.techstackList}">технологии</p>
                         <label>
                             <textarea class="card-aboutme" th:text="${userdata.personalData.aboutme}"
                                       readonly="readonly">о пользователе</textarea>
                         </label>
+                        <a th:href="@{'/give_user/'+${task.id}+'/'+${userdata.user.id}}" class="give-button">
+                            <button type="button" class="btn btn-outline-warning">
+                                Дать пользователю на выполнение
+                            </button>
+                        </a>
+                        <a th:href="@{'/delete_user/'+${task.id}+'/'+${userdata.user.id}}" class="delete-button">
+                            <button type="button" class="btn btn-danger">
+                                удалить
+                            </button>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    let linkList = document.getElementById("links").innerHTML;
-    linkList = linkList.split(' ');
-    const ul = document.createElement('ul');
-    for (let j = 0; j < linkList.length; j++) {
-        let li = document.createElement('li');
-        li.innerHTML = '<a class="mylinks" href="' + linkList[j] + '">' + linkList[j].substring(linkList[j].indexOf("//") + 2, linkList[j].indexOf("/", 8)) + '</a>';
-        ul.appendChild(li);
-    }
-    document.getElementById("links").parentNode.replaceChild(ul, document.getElementById("links"));
-</script>
 </body>

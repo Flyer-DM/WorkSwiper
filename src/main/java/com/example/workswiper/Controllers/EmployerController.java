@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -97,6 +99,17 @@ public class EmployerController {
         }
         model.addAttribute("users", userFullDataList);
         return "my_users";
+    }
+
+    @RequestMapping("/delete_user/{task_id}/{user_id}")
+    public String deleteUserForTask(Model model, @PathVariable(name = "task_id") Long task_id,
+                                    @PathVariable(name = "user_id") Long user_id) {
+        Task task = taskService.get(task_id);
+        List<User> likedUsers = task.getUsersLikedFromEmployer();
+        likedUsers = likedUsers.stream().filter(user -> !Objects.equals(user.getId(), user_id)).collect(Collectors.toList());
+        task.setUsersLikedFromEmployer(likedUsers);
+        taskService.save(task);
+        return usersForTask(model, task_id);
     }
 
     @RequestMapping("/delete_task/{id}")

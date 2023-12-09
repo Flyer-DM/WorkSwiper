@@ -61,8 +61,7 @@ public class Funcs {
             UserFullData userFullData = new UserFullData(userToShow);
             userFullData.setTaskLiked(task);
             userFullData.setPersonalData(personalDataService.findByUser_Id(userToShow));
-            String links = String.join(" ", linkService.findByUser_Id(userToShow).stream().map(Link::getLink).toList());
-            userFullData.setLinkList(links);
+            userFullData.setLinkList(linkService.findByUser_Id(userToShow));
             String techs = String.join(" ", userToShow.getTechstacks().stream().map(Techstack::getTechnology).toList());
             userFullData.setTechstackList(techs);
             return userFullData;

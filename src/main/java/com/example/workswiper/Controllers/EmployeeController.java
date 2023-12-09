@@ -189,7 +189,7 @@ public class EmployeeController {
         String liked = request.getParameter("likedCard");
         if (Strings.isNotEmpty(liked)) {
             User user = funcs.getUserByEmail();
-            Collection<Task> like = new ArrayList<>();
+            Collection<Task> like = user.getTask_stared();
             like.add(taskService.get(Long.valueOf(liked)));
             user.setTask_stared(like);
             userService.save(user);
@@ -223,7 +223,7 @@ public class EmployeeController {
         String disliked = request.getParameter("dislikedCard");
         if (Strings.isNotEmpty(disliked)) {
             User user = funcs.getUserByEmail();
-            Collection<Task> dislike = new ArrayList<>();
+            Collection<Task> dislike = user.getTask_seen();
             dislike.add(taskService.get(Long.valueOf(disliked)));
             user.setTask_seen(dislike);
             userService.save(user);

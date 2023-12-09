@@ -12,6 +12,9 @@
 </head>
 
 <body>
+<div th:if="${#lists.isEmpty(tasks)}" class="no-tasks">
+    Нет новых задач
+</div>
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" th:href="@{/employee}"
        style="font-family: impact, serif; color: black; font-size: 30px; margin-left: 4px">WorkSwiper</a>
@@ -34,9 +37,9 @@
         </div>
     </div>
 </nav>
-<table id="1" class="table table-striped table-hover" style="display:none;">
-    <tbody>
-    <div th:if="${not #lists.isEmpty(tasks)}">
+<div th:if="${not #lists.isEmpty(tasks)}">
+    <table id="1" class="table table-striped table-hover" style="display:none;">
+        <tbody>
         <tr th:each="task : ${tasks}" class="table-tr">
             <th scope="row" class="table-th" th:text="${task.id}"></th>
             <th scope="row" class="table-th" th:text="${task.user_id.lastName} + ' ' + ${task.user_id.firstName}"></th>
@@ -48,51 +51,53 @@
             <th scope="row" class="table-th" th:text="${task.price_id.amount}"></th>
             <th scope="row" class="table-th" th:text="${task.price_id.currency}"></th>
         </tr>
-    </div>
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-<div>
-    <div id="cardCount" style="display: none"></div>
-    <div th:if="${!hide}">
-        <form id="form-like" th:action="@{/check_likes}" method="post">
-            <label for="likedCard"></label><textarea name="likedCard" id="likedCard" style="display: none"></textarea>
-            <input type="submit" style="display: none">
-        </form>
+    <div>
+        <div id="cardCount" style="display: none"></div>
+        <div th:if="${!hide}">
+            <form id="form-like" th:action="@{/check_likes}" method="post">
+                <label for="likedCard"></label><textarea name="likedCard" id="likedCard"
+                                                         style="display: none"></textarea>
+                <input type="submit" style="display: none">
+            </form>
+        </div>
+        <div th:if="${hide}">
+            <form id="form-like" th:action="@{/check_likes_archive}" method="post">
+                <label for="likedCard"></label><textarea name="likedCard" id="likedCard"
+                                                         style="display: none"></textarea>
+                <input type="submit" style="display: none">
+            </form>
+        </div>
+        <div th:if="${!hide}">
+            <form id="form-dislike" th:action="@{/check_dislikes}" method="post">
+                <label for="dislikedCard"></label><textarea name="dislikedCard" id="dislikedCard"
+                                                            style="display: none"></textarea>
+                <input type="submit" style="display: none">
+            </form>
+        </div>
     </div>
-    <div th:if="${hide}">
-        <form id="form-like" th:action="@{/check_likes_archive}" method="post">
-            <label for="likedCard"></label><textarea name="likedCard" id="likedCard" style="display: none"></textarea>
-            <input type="submit" style="display: none">
-        </form>
-    </div>
-    <div th:if="${!hide}">
-        <form id="form-dislike" th:action="@{/check_dislikes}" method="post">
-            <label for="dislikedCard"></label><textarea name="dislikedCard" id="dislikedCard"
-                                                        style="display: none"></textarea>
-            <input type="submit" style="display: none">
-        </form>
-    </div>
-</div>
 
-<div class="card-all-cards">
-    <ion-icon id="dislike" name="heart-dislike"></ion-icon>
-    <div id="swiper">
-        <p class="task-id"></p>
-        <p class="task-author"></p>
-        <p class="task-name"></p>
-        <p class="task-description"></p>
-        <p class="task-starttime"></p>
-        <p class="task-endtime"></p>
-        <p class="task-result"></p>
-        <p class="task-amount"></p>
-        <p class="task-currency"></p>
+    <div class="card-all-cards">
+        <ion-icon id="dislike" name="heart-dislike"></ion-icon>
+        <div id="swiper">
+            <p class="task-id"></p>
+            <p class="task-author"></p>
+            <p class="task-name"></p>
+            <p class="task-description"></p>
+            <p class="task-starttime"></p>
+            <p class="task-endtime"></p>
+            <p class="task-result"></p>
+            <p class="task-amount"></p>
+            <p class="task-currency"></p>
+        </div>
+        <ion-icon id="like" name="heart"></ion-icon>
     </div>
-    <ion-icon id="like" name="heart"></ion-icon>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <br>
 </div>
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-<br>
 </body>
 
 <script lang="JavaScript">
