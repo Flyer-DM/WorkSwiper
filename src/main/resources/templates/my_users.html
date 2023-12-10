@@ -35,7 +35,7 @@
 <div class="card-all-cards">
     <div th:if="${not #lists.isEmpty(users)}">
         <div class="flex-container">
-            <div th:each="userdata : ${users}">
+            <div th:each="userdata, iState : ${users}">
                 <div class="swiper">
                     <div class="card" style="cursor: default">
                         <div>
@@ -43,13 +43,20 @@
                                th:text="${userdata.user.firstName + ' ' +  userdata.user.lastName + ' ' +
                                (userdata.personalData.age != null ? ', ' + userdata.personalData.age : '')}">
                                 Имя Фамилия, возраст</p>
+                            <div th:if="${userImages[iState.index].image != null}">
+                                <img class="card-image"
+                                               th:src="@{${'/display?id=' + userImages[iState.index].id}}"
+                                               alt="">
+                            </div>
                         </div>
                         <p class="card-email" th:text="${userdata.user.email}">почта</p>
                         <p class="card-telephone"
-                           th:text="${userdata.personalData.telephone != null ? userdata.personalData.telephone : ''}">телефон</p>
+                           th:text="${userdata.personalData.telephone != null ? userdata.personalData.telephone : ''}">
+                            телефон</p>
                         <p class="card-country"
                            th:text="${(userdata.personalData.country != null ? userdata.personalData.country : '')
-                           + (userdata.personalData.city != null ? ' ' +userdata.personalData.city : '')}">страна, город</p>
+                           + (userdata.personalData.city != null ? ' ' +userdata.personalData.city : '')}">страна,
+                            город</p>
                         <p class="card-education" th:if="${userdata.personalData.education != null}"
                            th:text="${userdata.personalData.education}">образование</p>
                         <p class="card-linklist" th:if="${not #lists.isEmpty(userdata.linkList)}">

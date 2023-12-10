@@ -40,13 +40,15 @@ public class EmployerController {
 
     final TaskService taskService;
 
+    final ImageService imageService;
+
     final Funcs funcs;
 
 
     @Autowired
     public EmployerController(UserServiceImpl userService, PersonalDataService personalDataService,
                               LinkService linkService, UserRepository userRepository, FirstTimeService firstTimeService,
-                              TechStackService techStackService, TaskService taskService) {
+                              TechStackService techStackService, TaskService taskService, ImageService imageService) {
         this.userService = userService;
         this.personalDataService = personalDataService;
         this.linkService = linkService;
@@ -54,6 +56,7 @@ public class EmployerController {
         this.firstTimeService = firstTimeService;
         this.techStackService = techStackService;
         this.taskService = taskService;
+        this.imageService = imageService;
         this.funcs = new Funcs(userRepository, techStackService, taskService, personalDataService, linkService);
     }
 
@@ -94,10 +97,13 @@ public class EmployerController {
         Task task = taskService.get(id);
         model.addAttribute(task);
         List<UserFullData> userFullDataList = new ArrayList<>();
+        List<Image> userImages = new ArrayList<>();
         for (User user : task.getUsersLikedFromEmployer()) {
             userFullDataList.add(funcs.getUserFullData(task, user));
+            userImages.add(imageService.findByUser_Id(user));
         }
         model.addAttribute("users", userFullDataList);
+        model.addAttribute("userImages", userImages);
         return "my_users";
     }
 

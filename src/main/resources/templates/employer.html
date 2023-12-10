@@ -32,9 +32,9 @@
         </div>
     </div>
 </nav>
-<table id="1" class="table table-striped table-hover" style="display: none">
-    <tbody>
-    <div th:if="${not #lists.isEmpty(userFullDataList)}">
+<div th:if="${not #lists.isEmpty(userFullDataList)}">
+    <table id="1" class="table table-striped table-hover" style="display: none">
+        <tbody>
         <tr th:each="userdata : ${userFullDataList}" class="table-tr">
             <th scope="row" class="table-th" th:text="${userdata.user.id}"></th>
             <th scope="row" class="table-th" th:text="${userdata.taskLiked.id}"></th>
@@ -51,62 +51,61 @@
             <th scope="row" class="table-th" th:text="${userdata.techstackList ?: ''}"></th>
             <th scope="row" class="table-th" th:text="${userdata.personalData.aboutme ?: ''}"></th>
         </tr>
-    </div>
-    </tbody>
-</table>
-
-<div>
-    <div id="cardCount" style="display: none"></div>
-    <!--    <div th:if="${!hide}">-->
+        </tbody>
+    </table>
     <div>
-        <form id="form-like" th:action="@{/check_liked_user}" method="post">
-            <label for="likedCard"></label><textarea name="likedCard" id="likedCard" style="display: none"></textarea>
-            <input type="submit" style="display: none">
-        </form>
-    </div>
-    <!--    <div th:if="${hide}">-->
-    <div>
-        <!--        <form id="form-like" th:action="@{/check_likes_archive}" method="post">-->
-        <!--            <label for="likedCard"></label><textarea name="likedCard" id="likedCard" style="display: none"></textarea>-->
-        <!--            <input type="submit" style="display: none">-->
-        <!--        </form>-->
-        <!--    </div>-->
+        <div id="cardCount" style="display: none"></div>
         <!--    <div th:if="${!hide}">-->
-        <form id="form-dislike" th:action="@{/check_disliked_user}" method="post">
-            <label for="dislikedCard"></label><textarea name="dislikedCard" id="dislikedCard"
-                                                        style="display: none"></textarea>
-            <input type="submit" style="display: none">
-        </form>
-    </div>
-</div>
-
-<div class="card-all-cards">
-
-    <ion-icon id="dislike" name="heart-dislike"></ion-icon>
-    <div id="swiper">
-        <p class="card-id"></p>
-        <p class="task-id"></p>
-        <p class="card-task"></p>
         <div>
-            <p class="card-firstname"></p>
-            <p class="card-lastname"></p>
+            <form id="form-like" th:action="@{/check_liked_user}" method="post">
+                <label for="likedCard"></label><textarea name="likedCard" id="likedCard"
+                                                         style="display: none"></textarea>
+                <input type="submit" style="display: none">
+            </form>
         </div>
-        <p class="card-email"></p>
-        <p class="card-telephone"></p>
-        <p class="card-age"></p>
-        <p class="card-country"></p>
-        <p class="card-city"></p>
-        <p class="card-education"></p>
-        <p class="card-linklist"></p>
-        <p class="card-techstacklist"></p>
-        <p class="card-aboutme"></p>
+        <!--    <div th:if="${hide}">-->
+        <div>
+            <!--        <form id="form-like" th:action="@{/check_likes_archive}" method="post">-->
+            <!--            <label for="likedCard"></label><textarea name="likedCard" id="likedCard" style="display: none"></textarea>-->
+            <!--            <input type="submit" style="display: none">-->
+            <!--        </form>-->
+            <!--    </div>-->
+            <!--    <div th:if="${!hide}">-->
+            <form id="form-dislike" th:action="@{/check_disliked_user}" method="post">
+                <label for="dislikedCard"></label><textarea name="dislikedCard" id="dislikedCard"
+                                                            style="display: none"></textarea>
+                <input type="submit" style="display: none">
+            </form>
+        </div>
     </div>
-    <ion-icon id="like" name="heart"></ion-icon>
+
+    <div class="card-all-cards">
+        <ion-icon id="dislike" name="heart-dislike"></ion-icon>
+        <div id="swiper">
+            <p class="card-id"></p>
+            <p class="task-id"></p>
+            <p class="card-task"></p>
+            <div>
+                <p class="card-firstname"></p>
+                <p class="card-lastname"></p>
+            </div>
+            <p class="card-email"></p>
+            <p class="card-telephone"></p>
+            <p class="card-age"></p>
+            <p class="card-country"></p>
+            <p class="card-city"></p>
+            <p class="card-education"></p>
+            <p class="card-linklist"></p>
+            <p class="card-techstacklist"></p>
+            <p class="card-aboutme"></p>
+        </div>
+        <ion-icon id="like" name="heart"></ion-icon>
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <br>
 </div>
-</div>
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-<br>
 </body>
 
 <script lang="JavaScript">

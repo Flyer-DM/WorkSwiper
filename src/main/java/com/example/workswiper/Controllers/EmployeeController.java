@@ -136,6 +136,7 @@ public class EmployeeController {
         mav.addObject("personalData", personalDataService.findByUser_Id(user));
         mav.addObject("linkList", linkService.findByUser_Id(user));
         mav.addObject("techStackList", user.getTechstacks());
+        mav.addObject("role", user.getRoles().stream().toList().get(0).getName());
         return mav;
     }
 
@@ -159,7 +160,14 @@ public class EmployeeController {
         byte[] bytes = file.getBytes();
         Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
         Image image = imageService.findByUser_Id(user);
-        if (image == null) imageService.create(new Image(user, blob));
+        if (image == null) {
+            if (blob.length() != 0) {
+                imageService.create(new Image(user, blob));
+            }
+            else {
+                imageService.create(new Image(user, null));
+            }
+        }
         else {
             if (blob.length() != 0) {
                 image.setImage(blob);
@@ -181,7 +189,7 @@ public class EmployeeController {
                 linkService.save(new Link(linkText, link, user));
             }
         }
-        return index();
+        return myProfile();
     }
 
     @RequestMapping("/check_likes")

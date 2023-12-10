@@ -41,9 +41,9 @@ public class SecurityConfiguration {
         http.cors().and().csrf().disable();
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/registration**", "/login", "/").permitAll()
+                        .requestMatchers("/registration**", "/login", "/", "/profile").permitAll()
                         .requestMatchers("/employer", "/new_task", "/my_tasks/*", "/my_users/*").hasRole("EMPLOYER")
-                        .requestMatchers("/employee", "/starred_cards", "/profile", "/edit_profile").hasRole("EMPLOYEE")
+                        .requestMatchers("/employee", "/starred_cards", "/edit_profile").hasRole("EMPLOYEE")
                         .requestMatchers("/user").access(new WebExpressionAuthorizationManager("hasRole('EMPLOYER') or hasRole('EMPLOYEE')"))
                         .anyRequest().authenticated()
 
