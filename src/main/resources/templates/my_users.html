@@ -40,15 +40,16 @@
                     <div class="card" style="cursor: default">
                         <div>
                             <p class="card-firstname"
-                               th:text="${userdata.user.firstName + ' ' +  userdata.user.lastName + ', ' + userdata.personalData.age}">
+                               th:text="${userdata.user.firstName + ' ' +  userdata.user.lastName + ' ' +
+                               (userdata.personalData.age != null ? ', ' + userdata.personalData.age : '')}">
                                 Имя Фамилия, возраст</p>
                         </div>
                         <p class="card-email" th:text="${userdata.user.email}">почта</p>
-                        <p class="card-telephone" th:if="${userdata.personalData.telephone != null}"
-                           th:text="${userdata.personalData.telephone}">телефон</p>
+                        <p class="card-telephone"
+                           th:text="${userdata.personalData.telephone != null ? userdata.personalData.telephone : ''}">телефон</p>
                         <p class="card-country"
-                           th:text="${userdata.personalData.country + ', ' + userdata.personalData.city}">страна,
-                            город</p>
+                           th:text="${(userdata.personalData.country != null ? userdata.personalData.country : '')
+                           + (userdata.personalData.city != null ? ' ' +userdata.personalData.city : '')}">страна, город</p>
                         <p class="card-education" th:if="${userdata.personalData.education != null}"
                            th:text="${userdata.personalData.education}">образование</p>
                         <p class="card-linklist" th:if="${not #lists.isEmpty(userdata.linkList)}">

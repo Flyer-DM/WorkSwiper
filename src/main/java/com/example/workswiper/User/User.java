@@ -1,14 +1,12 @@
 package com.example.workswiper.User;
 
+import com.example.workswiper.Domains.FirstTime;
 import com.example.workswiper.Domains.Task;
 import com.example.workswiper.Domains.Techstack;
 import jakarta.persistence.*;
 
 import java.util.Collection;
 
-/**
- * Модель представления сущности "пользователь" в БД.
- */
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
@@ -29,29 +27,30 @@ public class User {
     @Column(name = "password")
     private String password;
 
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "user_id")
+    private FirstTime firstTime;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_tech", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tech_id", referencedColumnName = "id"))
     private Collection<Techstack> techstacks;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "task_seen", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
     private Collection<Task> task_seen;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "task_stared", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
     private Collection<Task> task_stared;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    private Collection<Task> myTasks;
 
     public Collection<Task> getTask_seen() {
         return task_seen;
@@ -67,14 +66,6 @@ public class User {
 
     public void setTask_stared(Collection<Task> task_stared) {
         this.task_stared = task_stared;
-    }
-
-    public Collection<Task> getMyTasks() {
-        return myTasks;
-    }
-
-    public void setMyTasks(Collection<Task> myTasks) {
-        this.myTasks = myTasks;
     }
 
     public User() {
@@ -99,6 +90,14 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public FirstTime getFirstTime() {
+        return firstTime;
+    }
+
+    public void setFirstTime(FirstTime firstTime) {
+        this.firstTime = firstTime;
     }
 
     public String getFirstName() {
