@@ -95,14 +95,14 @@ ul {
     text-shadow: 4px 4px 4px #000;
 }
 
-.card-task, .task-description, .task-result, .card-techstacklist {
+.card-task {
     color: white;
     text-align: center;
     font-size: 50px;
     text-shadow: 4px 4px 4px #000;
 }
 
-.card-age, .card-country, .card-city, .task-starttime, .task-endtime, .task-amount, .task-currency {
+.card-age, .card-country, .card-city, .task-starttime, .task-endtime, .task-amount, .task-currency, .task-description, .task-result, .card-techstacklist {
     color: white;
     font-size: 20px;
     text-shadow: 4px 4px 4px #000;
