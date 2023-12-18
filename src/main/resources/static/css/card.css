@@ -76,7 +76,7 @@ ul {
     background: rgba(0, 0, 0, 0);
 }
 
-.card-lastname {
+.card-lastname, .task-name {
     color: white;
     font-size: 30px;
     text-shadow: 4px 4px 4px #000;
@@ -95,14 +95,14 @@ ul {
     text-shadow: 4px 4px 4px #000;
 }
 
-.card-task {
+.card-task, .task-description, .task-result {
     color: white;
     text-align: center;
     font-size: 50px;
     text-shadow: 4px 4px 4px #000;
 }
 
-.card-age, .card-country, .card-city {
+.card-age, .card-country, .card-city, .task-starttime, .task-endtime, .task-amount, .task-currency {
     color: white;
     font-size: 20px;
     text-shadow: 4px 4px 4px #000;
