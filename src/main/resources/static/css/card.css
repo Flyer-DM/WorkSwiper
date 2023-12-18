@@ -95,7 +95,7 @@ ul {
     text-shadow: 4px 4px 4px #000;
 }
 
-.card-task, .task-description, .task-result {
+.card-task, .task-description, .task-result, .card-techstacklist {
     color: white;
     text-align: center;
     font-size: 50px;
